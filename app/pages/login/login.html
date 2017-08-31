@@ -1,10 +1,11 @@
-<StackLayout #container>
-  <Image src="res://logo_login" stretch="none" horizontalAlignment="center"></Image>
+<GridLayout class="wrapper" rows="auto, auto, auto, auto, auto" columns="2*, 2*">
+  <Image row="0" colSpan="2"  src="res://logo_login" stretch="none" horizontalAlignment="center"></Image>
+  
+  <TextField row="1" colSpan="2" hint="Email Address" keyboardType="email" [(ngModel)]="user.email" autocorrect="false" autocapitalizationType="none"></TextField>
+  <TextField row="2" colSpan="2" hint="Password" secure="true" [(ngModel)]="user.password"></TextField>
 
-  <TextField hint="Email Address" keyboardType="email" [(ngModel)]="user.email"
-    autocorrect="false" autocapitalizationType="none"></TextField>
-  <TextField hint="Password" secure="true" [(ngModel)]="user.password"></TextField>
-
-  <Button [text]="isLoggingIn ? 'Sign in' : 'Sign up'" class="submit-button" (tap)="submit()"></Button>
-  <Button [text]="isLoggingIn ? 'Sign up' : 'Back to login'" (tap)="toggleDisplay()"></Button>
-</StackLayout>
+  <Button row="3" colSpan="2" [text]="isLoggingIn ? 'Sign in' : 'Sign up'" class="submit-button" (tap)="submit()"></Button>
+  <Button row="4" col="0" text="Forgot Password?"  class="secondary-button" (tap)="initiateForgotPassword()"></Button>
+  <Button row="4" col="1" [text]="isLoggingIn ? 'Sign up' : 'Back to login'" (tap)="toggleDisplay()" class="secondary-button"></Button>
+</GridLayout>
+<ActivityIndicator busy="{{ isLoginBusy }}" width="100" height="100" class="activity-indicator"></ActivityIndicator>

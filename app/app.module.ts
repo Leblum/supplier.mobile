@@ -16,7 +16,7 @@ import { LoginComponent } from "../app/pages/login/login.component";
         NativeScriptModule,
         AppRoutingModule,
         NativeScriptFormsModule,
-        NativeScriptHttpModule
+        NativeScriptHttpModule,
     ],
     declarations: [
         AppComponent,

@@ -1,6 +1,1 @@
-StackLayout {
-  height: 305;
-}
-Button {
-  height: 40;
-}
+Button{height:40}GridLayout{height:50%}

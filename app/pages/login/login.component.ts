@@ -5,6 +5,8 @@ import { Page } from "ui/page";
 import { Color } from "color";
 import { View } from "ui/core/view";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
+import { ActivityIndicator } from "ui/activity-indicator";
+
 
 @Component({
     selector: "my-app",
@@ -17,6 +19,7 @@ export class LoginComponent implements OnInit {
 
     user: IUser;
     isLoggingIn = true;
+    public isLoginBusy: boolean = false;
 
     constructor(private router: Router, private userService: UserService, private page: Page) {
         this.user = {
@@ -33,13 +36,14 @@ export class LoginComponent implements OnInit {
     toggleDisplay() {
         this.isLoggingIn = !this.isLoggingIn;
         let container = <View>this.container.nativeElement;
-        container.animate({
-            backgroundColor: this.isLoggingIn ? new Color("white") : new Color("#D3D3D3"),
-            duration: 300
-        });
+        // container.animate({
+        //     backgroundColor: this.isLoggingIn ? new Color("white") : new Color("#D3D3D3"),
+        //     duration: 300
+        // });
     }
 
     submit() {
+
         if (!this.userService.validateEmail(this.user)) {
             alert("Enter a valid email address.");
             return;
@@ -52,22 +56,35 @@ export class LoginComponent implements OnInit {
         }
     }
 
+    initiateForgotPassword(){
+        
+    }
+
     login() {
+        this.isLoginBusy = true;
         this.userService.login(this.user)
-            .subscribe(
-            () => this.router.navigate(["/home"]),
-            (error) => alert("Unfortunately we could not find your account.")
-            );
+            .subscribe(() => {
+                this.router.navigate(["/home"])
+                this.isLoginBusy = false;
+            },
+            (error) => {
+                alert("Unfortunately we could not find your account.")
+                this.isLoginBusy = false;
+            });
     }
 
     signUp() {
+        this.isLoginBusy = true;
         this.userService.register(this.user)
-            .subscribe(
-            () => {
+            .subscribe(() => {
+                this.isLoginBusy = false;
                 alert("Your account was successfully created.");
                 this.toggleDisplay();
+
             },
-            () => alert("Unfortunately we were unable to create your account.")
-            );
+            (error) => {
+                this.isLoginBusy = false;
+                alert("Unfortunately we were unable to create your account.")
+            });
     }
 }
