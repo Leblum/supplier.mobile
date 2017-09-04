@@ -1,11 +1,15 @@
-<GridLayout class="wrapper" rows="auto, auto, auto, auto, auto" columns="2*, 2*">
+<GridLayout class="wrapper" rows="auto, auto, auto, auto, auto, auto" columns="*, *">
   <Image row="0" colSpan="2"  src="res://logo_login" stretch="none" horizontalAlignment="center"></Image>
   
   <TextField row="1" colSpan="2" hint="Email Address" keyboardType="email" [(ngModel)]="user.email" autocorrect="false" autocapitalizationType="none"></TextField>
-  <TextField row="2" colSpan="2" hint="Password" secure="true" [(ngModel)]="user.password"></TextField>
+  <TextField row="2" colSpan="2" hint="Password" secure="true" [(ngModel)]="user.password" returnKeyType="done" (returnPress)="login()"></TextField>
 
-  <Button row="3" colSpan="2" [text]="isLoggingIn ? 'Sign in' : 'Sign up'" class="submit-button" (tap)="submit()"></Button>
-  <Button row="4" col="0" text="Forgot Password?"  class="secondary-button" (tap)="initiateForgotPassword()"></Button>
-  <Button row="4" col="1" [text]="isLoggingIn ? 'Sign up' : 'Back to login'" (tap)="toggleDisplay()" class="secondary-button"></Button>
+  <Button row="3" colSpan="2" text="Sign In" class="submit-button" (tap)="login()"></Button>
+  <Switch row="4" col="0" checked="{{ isRememberMeActive }}" ></Switch>
+  <Label row="4" col="0" text="Remember Me"></Label>
+  <Button row="5" col="0" class="secondary-button" text="Forgot Password?" (tap)="initiateForgotPassword()"></Button>
+  <Button row="5" col="1" class="secondary-button" text="Sign Up" (tap)="navigateToSignup()"></Button>
+
+  <!-- <Button row="6" colSpan="2" text="Sign UP TEST" class="submit-button" (tap)="signUp()"></Button> -->
 </GridLayout>
 <ActivityIndicator busy="{{ isLoginBusy }}" width="100" height="100" class="activity-indicator"></ActivityIndicator>

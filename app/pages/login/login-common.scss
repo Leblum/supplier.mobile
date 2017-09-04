@@ -3,13 +3,14 @@
 .wrapper{
   margin-left: 30;
   margin-right: 30;
-  background-color: white;
-  padding-top:10;
-  padding-bottom:10;
+  background-color: $text-light;
+  padding-top:20;
+  padding-bottom:20;
 }
 
 GridLayout {
   width:90%;
+  height:60%
 }
 
 Image {
@@ -19,23 +20,42 @@ Image {
 Button, TextField {
   margin-left: 16;
   margin-right: 16;
+  margin-bottom: 20;
+}
+TextField{
+  border-bottom-color: $grey-dark;
+  border-bottom-width: 2;
+}
+Label{
+  margin-left: 20;
   margin-bottom: 10;
 }
 
+Switch{
+  margin-bottom: 10;
+  margin-left:-5;
+  margin-top:-5;
+}
+
 .submit-button {
-  background-color: teal;
-  color: white;
+  background-color: $grey-dark;
+  color: $text-light;
 }
 
 .activity-indicator {
-  color: $blue-light;
+  color: $grey-light;
 }
 
 .secondary-button{
-  background-color: white;
-  color: $blue-light;
-  margin-left: 100;
-  margin-right: 100;
-  width: 45%;
+  background-color: $text-light;
+  color: $grey-light;
+  width: 40%;
+  margin-left:20;
+  margin-right:20;
+  // This will remove the border around the secondary buttons, you can remove it
+  // if this isn't needed.
+  background-color: rgba(255, 0, 0, 0.0);
+  border-color:rgba(255, 0, 0, 0.0);
+  border-width: 1;
 }
 

@@ -1,15 +1,16 @@
 // Colors
 $background-dark: #F8F8F8 !default;
 $background-light: #FFFFFF !default;
+$text-light: #FFFFFF;
 
-$blue-dark: #252525 !default;
-$blue-light: #747474 !default;
-$blue-50: rgba($blue-dark, 0.5) !default;
-$blue-20: rgba($blue-dark, 0.2) !default;
-$blue-10: rgba($blue-dark, 0.1) !default;
+$grey-dark: #252525 !default;
+$grey-light: #747474 !default;
+$grey-50: rgba($grey-dark, 0.5) !default;
+$grey-20: rgba($grey-dark, 0.2) !default;
+$grey-10: rgba($grey-dark, 0.1) !default;
 
-$accent-dark: #3A53FF !default;
-$accent-light: #4781FE !default;
+$accent-dark: #5C5C5C !default;
+$accent-light: #C9C9C9 !default;
 
 $success-dark: #06CE6A !default;
 $success-light: #00E676 !default;

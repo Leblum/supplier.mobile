@@ -6,10 +6,11 @@ import { Color } from "color";
 import { View } from "ui/core/view";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivityIndicator } from "ui/activity-indicator";
+import  * as applicationSettings from 'application-settings';
 
 
 @Component({
-    selector: "my-app",
+    selector: "login-page",
     providers: [UserService],
     templateUrl: "pages/login/login.html",
     styleUrls: ["pages/login/login-common.css", "pages/login/login.css"]
@@ -18,10 +19,11 @@ export class LoginComponent implements OnInit {
     @ViewChild("container") container: ElementRef;
 
     user: IUser;
-    isLoggingIn = true;
     public isLoginBusy: boolean = false;
+    public isRememberMeActive: boolean = false;
 
     constructor(private router: Router, private userService: UserService, private page: Page) {
+        // For testing
         this.user = {
             email: 'tester@leblum.com',
             password: 'password'
@@ -30,41 +32,21 @@ export class LoginComponent implements OnInit {
 
     ngOnInit(): void {
         this.page.actionBarHidden = true;
-        //this.page.backgroundImage = "res://bg_login";
-    }
-
-    toggleDisplay() {
-        this.isLoggingIn = !this.isLoggingIn;
-        let container = <View>this.container.nativeElement;
-        // container.animate({
-        //     backgroundColor: this.isLoggingIn ? new Color("white") : new Color("#D3D3D3"),
-        //     duration: 300
-        // });
-    }
-
-    submit() {
-
-        if (!this.userService.validateEmail(this.user)) {
-            alert("Enter a valid email address.");
-            return;
-        }
-
-        if (this.isLoggingIn) {
-            this.login();
-        } else {
-            this.signUp();
-        }
     }
 
     initiateForgotPassword(){
-        
+        this.router.navigate(['/forgot-password']);
     }
 
     login() {
         this.isLoginBusy = true;
+        if (!this.userService.validateEmail(this.user)) {
+            alert("Please enter a valid email address.");
+            return;
+        }
         this.userService.login(this.user)
             .subscribe(() => {
-                this.router.navigate(["/home"])
+                this.router.navigate(["/home"]);
                 this.isLoginBusy = false;
             },
             (error) => {
@@ -73,14 +55,16 @@ export class LoginComponent implements OnInit {
             });
     }
 
+    navigateToSignup(){
+        this.router.navigate(['/signup']);
+    }
+
     signUp() {
         this.isLoginBusy = true;
         this.userService.register(this.user)
             .subscribe(() => {
                 this.isLoginBusy = false;
                 alert("Your account was successfully created.");
-                this.toggleDisplay();
-
             },
             (error) => {
                 this.isLoginBusy = false;

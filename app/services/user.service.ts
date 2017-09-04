@@ -33,12 +33,21 @@ export class UserService {
             }).catch(this.handleErrors);
     }
 
+    public submitForgotPasswordRequest(user: IUser): Observable<void>{
+        return this.http.post(
+            'https://dev.identity.leblum.io/api' + '/v1' + "/password-reset-request",
+            {
+                email: user.email,
+            }).catch(this.handleErrors);
+    }
+
     handleErrors(error: Response) {
         console.log(JSON.stringify(error.json()));
         return Observable.throw(error);
     }
 
     public validateEmail(user: IUser): boolean {
-        return true;
+            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(user.email);
     }
 }

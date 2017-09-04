@@ -7,6 +7,7 @@ import { NativeScriptHttpModule } from "nativescript-angular/http";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { LoginComponent } from "../app/pages/login/login.component";
+import { ForgotPasswordComponent } from "../app/pages/forgot-password/forgot-password.component";
 
 @NgModule({
     bootstrap: [
@@ -20,7 +21,8 @@ import { LoginComponent } from "../app/pages/login/login.component";
     ],
     declarations: [
         AppComponent,
-        LoginComponent
+        LoginComponent,
+        ForgotPasswordComponent
     ],
     providers: [
         { provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader }

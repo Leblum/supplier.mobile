@@ -3,7 +3,7 @@ import { IRole } from './role.model';
 export interface IUser {
     firstName?: string,
     lastName?: string,
-    password: string;
+    password?: string;
     email: string;
     roles?: Array<IRole>;
     organizationId?: string; // Nullable for now as we don't have to have an org id on login.  we'll get that later.
