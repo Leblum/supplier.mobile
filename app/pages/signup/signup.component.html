@@ -1,132 +1,124 @@
 <GridLayout rows="100,*" columns="*">
-
+    <!-- , email.valid, phone.valid, password.valid, companyName.valid, companyEmail.valid, companyPhone.valid ,pickupAddress1.valid,pickupAddress2.valid, pickupCity.valid,pickupState.valid, pickupZip.valid, pickupName.valid, pickupPhone.valid -->
     <GridLayout row="0" class="navigation" rows="auto" columns="80%, *, 80%">
         <Button row="0" col="0" class="secondary-button" text="Back" (tap)="goBack()"></Button>
-        <Button row="0" col="2" class="secondary-button" text="Next" 
-        [visibility]="isNextOn(firstName.valid, lastName.valid, email.valid, phone.valid, password.valid, companyName.valid, companyEmail.valid, companyPhone.valid,pickupAddress1.valid,pickupAddress2.valid, pickupCity.valid,pickupState.valid, pickupZip.valid, pickupName.valid, pickupPhone.valid ) 
-        ? 'visible' : 'hidden'" (tap)="goNext(currentSignUpStep+1)"></Button>
+        <Button row="0" col="2" class="secondary-button" text="Next" (tap)="goNext(currentSignUpStep+1)"></Button>
     </GridLayout>
-    <ScrollView row="1" orientation="vertical" height="100%">
-        <GridLayout [visibility]="currentSignUpStep == signupSteps.name ? 'visible' : 'hidden'" row="1" class="wrapper" rows="auto,30, auto,auto, auto, auto"
-            columns="*">
-            <Label row="0" col="0" class="stepTitle" text="Your Name"></Label>
+    <ScrollView row="1" orientation="vertical">
 
-            <TextField row="2" col="0" #firstName="ngModel" hint="First Name" [(ngModel)]="user.firstName" required autocorrect="false"
-                autocapitalizationType="none"></TextField>\
-            <Label row="3" class="validation-message" [visibility]="(firstName.touched && firstName.invalid) ? 'visible': 'hidden'" text="* Required"></Label>
+        <StackLayout>
 
-            <TextField row="4" col="0" #lastName="ngModel" returnKeyType="next" hint="Last Name" required [(ngModel)]="user.lastName"
-                autocorrect="false" autocapitalizationType="none" (returnPress)="firstName.valid && lastName.valid ? goNext(signupSteps.email) : null"></TextField>
-            <Label row="5" class="validation-message" [visibility]="(lastName.touched && lastName.invalid) ? 'visible': 'hidden'" text="* Required"></Label>
+            <GridLayout class="wrapper" *ngIf="currentSignUpStep == signupSteps.name" rows="auto,30, auto,auto, auto, auto">
+                <Label row="0" class="stepTitle" text="Your Name"></Label>
 
-        </GridLayout>
+                <TextField row="2" #firstName="ngModel" hint="First Name" [(ngModel)]="user.firstName" required autocorrect="false" autocapitalizationType="none"></TextField>
+                <Label row="3" class="validation-message" [visibility]="(firstName.touched && firstName.invalid) ? 'visible': 'hidden'" text="* Required"></Label>
 
-        <GridLayout [visibility]="currentSignUpStep == signupSteps.email ? 'visible' : 'hidden'" row="1" class="wrapper" rows="auto,30, auto, auto"
-            columns="*">
+                <TextField row="4" #lastName="ngModel" returnKeyType="next" hint="Last Name" required [(ngModel)]="user.lastName" autocorrect="false"
+                    autocapitalizationType="none" (returnPress)="firstName.valid && lastName.valid ? goNext(signupSteps.email) : null"></TextField>
+                <Label row="5" class="validation-message" [visibility]="(lastName.touched && lastName.invalid) ? 'visible': 'hidden'" text="* Required"></Label>
+            </GridLayout>
 
-            <Label row="0" col="0" class="stepTitle" text="Your Email"></Label>
+            <GridLayout class="wrapper" rows="auto,30, auto, auto" *ngIf="currentSignUpStep == signupSteps.email">
 
-            <TextField pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"
-                row="2" col="0" #email="ngModel" returnKeyType="next" required keyboardType="email" hint="Email" [(ngModel)]="user.email"
-                autocorrect="false" autocapitalizationType="none" (returnPress)="email.valid ? goNext(signupSteps.phone) : null"></TextField>
-            <Label row="3" class="validation-message" [visibility]="(email.touched && email.invalid) || (email.errors) ? 'visible': 'hidden'"
-                text="* Required and should be name@company.com"></Label>
+                <Label row="0" col="0" class="stepTitle" text="Your Email"></Label>
+
+                <TextField pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"
+                    row="2" col="0" #email="ngModel" returnKeyType="next" required keyboardType="email" hint="Email" [(ngModel)]="user.email"
+                    autocorrect="false" autocapitalizationType="none" (returnPress)="email.valid ? goNext(signupSteps.phone) : null"></TextField>
+                <Label row="3" class="validation-message" [visibility]="(email.touched && email.invalid) || (email.errors) ? 'visible': 'hidden'"
+                    text="* Required and should be name@company.com"></Label>
 
 
-        </GridLayout>
+            </GridLayout>
 
-        <GridLayout [visibility]="currentSignUpStep == signupSteps.phone ? 'visible' : 'hidden'" row="1" class="wrapper" rows="auto,30, auto, auto"
-            columns="*">
+            <GridLayout *ngIf="currentSignUpStep == signupSteps.phone" class="wrapper" rows="auto,30, auto, auto">
 
-            <Label row="0" col="0" class="stepTitle" text="Your Phone"></Label>
+                <Label row="0" col="0" class="stepTitle" text="Your Phone"></Label>
 
-            <TextField row="2" col="0" #phone="ngModel" required pattern="^[1-9]\d{2}-\d{3}-\d{4}$" returnKeyType="next" keyboardType="phone"
-                hint="123-456-7890" [(ngModel)]="user.phone" autocorrect="false" autocapitalizationType="none" (returnPress)="phone.valid ? goNext(signupSteps.password): null"></TextField>
-            <Label row="3" class="validation-message" [visibility]="(phone.touched && phone.invalid) || (phone.errors) ? 'visible': 'hidden'"
-                text="* Required and should be 123-123-1234"></Label>
-        </GridLayout>
+                <TextField row="2" col="0" #phone="ngModel" required pattern="^[1-9]\d{2}-\d{3}-\d{4}$" returnKeyType="next" keyboardType="phone"
+                    hint="123-456-7890" [(ngModel)]="user.phone" autocorrect="false" autocapitalizationType="none" (returnPress)="phone.valid ? goNext(signupSteps.password): null"></TextField>
+                <Label row="3" class="validation-message" [visibility]="(phone.touched && phone.invalid) || (phone.errors) ? 'visible': 'hidden'"
+                    text="* Required and should be 123-123-1234"></Label>
+            </GridLayout>
 
-        <GridLayout [visibility]="currentSignUpStep == signupSteps.password ? 'visible' : 'hidden'" row="1" class="wrapper" rows="auto,30, auto, auto"
-            columns="*">
+            <GridLayout *ngIf="currentSignUpStep == signupSteps.password" class="wrapper" rows="auto,30, auto, auto">
 
-            <Label row="0" col="0" class="stepTitle" text="Create a password"></Label>
+                <Label row="0" col="0" class="stepTitle" text="Create a password"></Label>
 
-            <TextField row="2" col="0" #password="ngModel" required minlength="6" returnKeyType="next" secure="true" hint="Password"
-                [(ngModel)]="user.password" autocorrect="false" autocapitalizationType="none" (returnPress)="password.valid ? goNext(signupSteps.companyInfo): null"></TextField>
-            <Label row="3" class="validation-message" [visibility]="(password.touched && password.invalid) || (password.errors) ? 'visible': 'hidden'"
-                text="* Required and must be at least 6 chars"></Label>
-        </GridLayout>
+                <TextField row="2" col="0" #password="ngModel" required minlength="6" returnKeyType="next" secure="true" hint="Password"
+                    [(ngModel)]="user.password" autocorrect="false" autocapitalizationType="none" (returnPress)="password.valid ? goNext(signupSteps.companyInfo): null"></TextField>
+                <Label row="3" class="validation-message" [visibility]="(password.touched && password.invalid) || (password.errors) ? 'visible': 'hidden'"
+                    text="* Required and must be at least 6 chars"></Label>
+            </GridLayout>
 
-        <GridLayout [visibility]="currentSignUpStep == signupSteps.companyInfo ? 'visible' : 'hidden'" row="1" class="wrapper" rows="auto, 30, auto, auto, auto, auto, auto, auto"
-            columns="*">
+            <GridLayout *ngIf="currentSignUpStep == signupSteps.companyInfo" class="wrapper" rows="auto, 30, auto, auto, auto, auto, auto, auto">
 
-            <Label row="0" class="stepTitle" text="Company Info"></Label>
+                <Label row="0" class="stepTitle" text="Company Info"></Label>
 
-            <TextField row="2" col="0" #companyName="ngModel" required returnKeyType="next" hint="Company Name" [(ngModel)]="supplier.name"
-                autocorrect="false" autocapitalizationType="none"></TextField>
-            <Label row="3" class="validation-message" [visibility]="(companyName.touched && companyName.invalid)? 'visible': 'hidden'"
-                text="* Required"></Label>
+                <TextField row="2" col="0" #companyName="ngModel" required returnKeyType="next" hint="Company Name" [(ngModel)]="supplier.name"
+                    autocorrect="false" autocapitalizationType="none"></TextField>
+                <Label row="3" class="validation-message" [visibility]="(companyName.touched && companyName.invalid)? 'visible': 'hidden'"
+                    text="* Required"></Label>
 
-            <TextField pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"
-                row="4" col="0" #companyEmail="ngModel" returnKeyType="next" required keyboardType="email" hint="Email" [(ngModel)]="supplier.companyEmail"
-                autocorrect="false" autocapitalizationType="none"></TextField>
-            <Label row="5" class="validation-message" [visibility]="(companyEmail.touched && companyEmail.invalid) || (companyEmail.errors) ? 'visible': 'hidden'"
-                text="* Required and should be name@company.com"></Label>
+                <TextField pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$"
+                    row="4" col="0" #companyEmail="ngModel" returnKeyType="next" required keyboardType="email" hint="Email" [(ngModel)]="supplier.companyEmail"
+                    autocorrect="false" autocapitalizationType="none"></TextField>
+                <Label row="5" class="validation-message" [visibility]="(companyEmail.touched && companyEmail.invalid) || (companyEmail.errors) ? 'visible': 'hidden'"
+                    text="* Required and should be name@company.com"></Label>
 
-            <TextField row="6" col="0" #companyPhone="ngModel" required pattern="^[1-9]\d{2}-\d{3}-\d{4}$" returnKeyType="next" keyboardType="phone"
-                hint="123-456-7890" [(ngModel)]="supplier.companyPhone" autocorrect="false" autocapitalizationType="none" 
-                (returnPress)="companyPhone.valid && companyEmail.valid && companyName.valid ? goNext(signupSteps.pickupDetails): null"></TextField>
-            <Label row="7" class="validation-message" [visibility]="(companyPhone.touched && companyPhone.invalid) || (companyPhone.errors) ? 'visible': 'hidden'"
-                text="* Required and should be 123-123-1234"></Label>
+                <TextField row="6" col="0" #companyPhone="ngModel" required pattern="^[1-9]\d{2}-\d{3}-\d{4}$" returnKeyType="next" keyboardType="phone"
+                    hint="123-456-7890" [(ngModel)]="supplier.companyPhone" autocorrect="false" autocapitalizationType="none"
+                    (returnPress)="companyPhone.valid && companyEmail.valid && companyName.valid ? goNext(signupSteps.pickupDetails): null"></TextField>
+                <Label row="7" class="validation-message" [visibility]="(companyPhone.touched && companyPhone.invalid) || (companyPhone.errors) ? 'visible': 'hidden'"
+                    text="* Required and should be 123-123-1234"></Label>
 
-        </GridLayout>
+            </GridLayout>
 
-        <GridLayout [visibility]="currentSignUpStep == signupSteps.pickupDetails ? 'visible' : 'hidden'" row="1" class="wrapper"
-            rows="auto, 30, auto, auto, auto, 20, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto"
-            columns="80, *">
+            <GridLayout *ngIf="currentSignUpStep == signupSteps.pickupDetails" class="wrapper" rows="auto, 30, auto, auto, auto, 20, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto"
+                columns="80, *">
 
-            <Label row="0" colSpan="2" class="stepTitle" text="Pickup Details"></Label>
+                <Label row="0" colSpan="2" class="stepTitle" text="Pickup Details"></Label>
 
-            <TextField row="2" colSpan="2" #pickupAddress1="ngModel" required returnKeyType="next" hint="Address" [(ngModel)]="supplier.pickupAddress.street1"
-                autocorrect="false" autocapitalizationType="none"></TextField>
-            <Label row="3" colSpan="2" class="validation-message" [visibility]="(pickupAddress1.touched && pickupAddress1.invalid)? 'visible': 'hidden'"
-                text="* Required"></Label>
+                <TextField row="2" colSpan="2" #pickupAddress1="ngModel" required returnKeyType="next" hint="Address" [(ngModel)]="supplier.pickupAddress.street1"
+                    autocorrect="false" autocapitalizationType="none"></TextField>
+                <Label row="3" colSpan="2" class="validation-message" [visibility]="(pickupAddress1.touched && pickupAddress1.invalid)? 'visible': 'hidden'"
+                    text="* Required"></Label>
 
-            <TextField row="4" colSpan="2" #pickupAddress2="ngModel" returnKeyType="next" hint="Suite # / Floor" [(ngModel)]="supplier.pickupAddress.street2"
-                autocorrect="false" autocapitalizationType="none"></TextField>
+                <TextField row="4" colSpan="2" #pickupAddress2="ngModel" returnKeyType="next" hint="Suite # / Floor" [(ngModel)]="supplier.pickupAddress.street2"
+                    autocorrect="false" autocapitalizationType="none"></TextField>
 
-            <TextField row="6" colSpan="2" #pickupCity="ngModel" required returnKeyType="next" hint="City" [(ngModel)]="supplier.pickupAddress.city"
-                autocorrect="false" autocapitalizationType="none"></TextField>
-            <Label row="7" colSpan="2" class="validation-message" [visibility]="(pickupCity.touched && pickupCity.invalid)? 'visible': 'hidden'"
-                text="* Required"></Label>
+                <TextField row="6" colSpan="2" #pickupCity="ngModel" required returnKeyType="next" hint="City" [(ngModel)]="supplier.pickupAddress.city"
+                    autocorrect="false" autocapitalizationType="none"></TextField>
+                <Label row="7" colSpan="2" class="validation-message" [visibility]="(pickupCity.touched && pickupCity.invalid)? 'visible': 'hidden'"
+                    text="* Required"></Label>
 
-            <TextField row="8" colSpan="2" #pickupState="ngModel" required returnKeyType="next" hint="State" [(ngModel)]="supplier.pickupAddress.state"
-                autocorrect="false" autocapitalizationType="none"></TextField>
-            <Label row="9" colSpan="2" class="validation-message" [visibility]="(pickupState.touched && pickupState.invalid)? 'visible': 'hidden'"
-                text="* Required"></Label>
+                <TextField row="8" colSpan="2" #pickupState="ngModel" required returnKeyType="next" hint="State" [(ngModel)]="supplier.pickupAddress.state"
+                    autocorrect="false" autocapitalizationType="none"></TextField>
+                <Label row="9" colSpan="2" class="validation-message" [visibility]="(pickupState.touched && pickupState.invalid)? 'visible': 'hidden'"
+                    text="* Required"></Label>
 
-            <TextField row="10" colSpan="2" minLength="5" pattern="^\d{5}$|^\d{5}-\d{4}$" #pickupZip="ngModel" keyboardType="phone" required returnKeyType="next" 
-                hint="Zip" [(ngModel)]="supplier.pickupAddress.zip"
-                autocorrect="false" autocapitalizationType="none"></TextField>
-            <Label row="11" colSpan="2" textWrap="true" class="validation-message" [visibility]="(pickupZip.touched && pickupZip.invalid)? 'visible': 'hidden'"
-                text="* Required can either be 12345 (zip) or 55555-4444 (zip+4)"></Label>
+                <TextField row="10" colSpan="2" minLength="5" pattern="^\d{5}$|^\d{5}-\d{4}$" #pickupZip="ngModel" keyboardType="phone" required
+                    returnKeyType="next" hint="Zip" [(ngModel)]="supplier.pickupAddress.zip" autocorrect="false" autocapitalizationType="none"></TextField>
+                <Label row="11" colSpan="2" textWrap="true" class="validation-message" [visibility]="(pickupZip.touched && pickupZip.invalid)? 'visible': 'hidden'"
+                    text="* Required can either be 12345 (zip) or 55555-4444 (zip+4)"></Label>
 
-            <Label row="12" colSpan="2" class="contact-title" text="Contact Person for Pickups"></Label>
-            <Switch row="13" col="0" checked="{{ isPickupSame }}" (checkedChange)="samePerson($event)"></Switch>
-            <Label row="13" col="1" class="contact-switch-label" text="I'm the contact person for pickups"></Label>
+                <Label row="12" colSpan="2" class="contact-title" text="Contact Person for Pickups"></Label>
+                <Switch row="13" col="0" checked="{{ isPickupSame }}" (checkedChange)="samePerson($event)"></Switch>
+                <Label row="13" col="1" class="contact-switch-label" text="I'm the contact person for pickups"></Label>
 
-            <TextField row="14" colSpan="2" #pickupName="ngModel" hint="Contact Full Name" [(ngModel)]="supplier.pickupName" required autocorrect="false"
-                autocapitalizationType="none" [isEnabled]="!isPickupSame"></TextField>
-            <Label row="15" colSpan="2" class="validation-message" [visibility]="(pickupName.touched && pickupName.invalid) ? 'visible': 'hidden'"
-                text="* Required"></Label>
-            
-            <TextField row="16" colSpan="2" #pickupPhone="ngModel" required pattern="^[1-9]\d{2}-\d{3}-\d{4}$" returnKeyType="next" keyboardType="phone"
-                hint="Contact Cell #" [isEnabled]="!isPickupSame" [(ngModel)]="supplier.pickupPhone" autocorrect="false" autocapitalizationType="none" 
-                (returnPress)="pickupPhone.valid && pickupName.valid && pickupZip.valid && pickupState.valid && pickupCity.valid && pickupAddress2.valid && pickupAddress1.valid ? goNext(signupSteps.teamUrl): null"></TextField>
-            <Label row="17" colSpan="2" class="validation-message" [visibility]="(phone.touched && phone.invalid)? 'visible': 'hidden'"
-                text="* Required and should be 123-123-1234"></Label>
+                <TextField row="14" colSpan="2" #pickupName="ngModel" hint="Contact Full Name" [(ngModel)]="supplier.pickupName" required
+                    autocorrect="false" autocapitalizationType="none" [isEnabled]="!isPickupSame"></TextField>
+                <Label row="15" colSpan="2" class="validation-message" [visibility]="(pickupName.touched && pickupName.invalid) ? 'visible': 'hidden'"
+                    text="* Required"></Label>
 
-        </GridLayout>
+                <TextField row="16" colSpan="2" #pickupPhone="ngModel" required pattern="^[1-9]\d{2}-\d{3}-\d{4}$" returnKeyType="next" keyboardType="phone"
+                    hint="Contact Cell #" [isEnabled]="!isPickupSame" [(ngModel)]="supplier.pickupPhone" autocorrect="false"
+                    autocapitalizationType="none" (returnPress)="pickupPhone.valid && pickupName.valid && pickupZip.valid && pickupState.valid && pickupCity.valid && pickupAddress2.valid && pickupAddress1.valid ? goNext(signupSteps.teamUrl): null"></TextField>
+                <Label row="17" colSpan="2" class="validation-message" [visibility]="(phone.touched && phone.invalid)? 'visible': 'hidden'"
+                    text="* Required and should be 123-123-1234"></Label>
+
+            </GridLayout>
+        </StackLayout>
     </ScrollView>
-
 </GridLayout>

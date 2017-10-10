@@ -15,21 +15,22 @@ import { Switch } from "tns-core-modules/ui/switch/switch";
     templateUrl: "./signup.component.html",
     styleUrls: ["./signup.component.css"]
 })
-export class SignupComponent implements OnInit, OnChanges {
+export class SignupComponent implements OnInit {
 
     public signupSteps = SignupSteps;
-    public currentSignUpStep: SignupSteps = 6;
+    public currentSignUpStep: SignupSteps = SignupSteps.name;
 
     public user: IUser = {};
     public supplier: ISupplier = {};
     public isPickupSame: boolean = false;
-
+    
     constructor(private router: Router, public userService: UserService, private page: Page) {
+        //Need to create empty objects so there's no null ref.
         this.supplier.companyAddress = {};
         this.supplier.pickupAddress = {};
-        this.user.firstName = 'test';
-        this.user.lastName = 'last';
-        this.user.phone = '303-949-6889';
+        // this.user.firstName = 'test';
+        // this.user.lastName = 'last';
+        // this.user.phone = '303-949-6889';
     }
 
     public samePerson(args) {
@@ -48,17 +49,13 @@ export class SignupComponent implements OnInit, OnChanges {
         }
     }
 
-
-    ngOnChanges(changes: SimpleChanges):void{
-        console.log('changes');
-    }
-
     ngOnInit(): void {
         /* *************************************asdf**********************
         * Use the "ngOnInit" handler to initialize data for the whole tab
         * navigation layout as a whole.
         *************************************************************/
         this.page.actionBarHidden = true;
+        console.log(this.currentSignUpStep);
     }
 
     goBack() {
@@ -101,6 +98,8 @@ export class SignupComponent implements OnInit, OnChanges {
 
     goNext(target: SignupSteps) {
         //if (this.isStepValid()) {
+            console.log(JSON.stringify(this.user));
+            console.log(JSON.stringify(this.supplier));
         this.currentSignUpStep = target;
         //}
     }
