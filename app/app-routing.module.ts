@@ -7,10 +7,11 @@ import { ForgotPasswordComponent } from "../app/pages/forgot-password/forgot-pas
 const routes: Routes = [
     // For testing we're going to head to forgot password first.
     //{ path: "", component: LoginComponent },
-    { path: "", component: ForgotPasswordComponent },
+    { path: "", loadChildren: "./pages/signup/signup.module#SignupModule" },
     { path: "login", component: LoginComponent },
     { path: "forgot-password", component: ForgotPasswordComponent },
-    { path: "home", loadChildren: "./tabs/tabs.module#TabsModule" }
+    { path: "home", loadChildren: "./tabs/tabs.module#TabsModule" },
+    { path: "signup", loadChildren: "./pages/signup/signup.module#SignupModule" }
 ];
 
 @NgModule({
