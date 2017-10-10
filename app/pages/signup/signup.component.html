@@ -2,7 +2,7 @@
     <!-- , email.valid, phone.valid, password.valid, companyName.valid, companyEmail.valid, companyPhone.valid ,pickupAddress1.valid,pickupAddress2.valid, pickupCity.valid,pickupState.valid, pickupZip.valid, pickupName.valid, pickupPhone.valid -->
     <GridLayout row="0" class="navigation" rows="auto" columns="80%, *, 80%">
         <Button row="0" col="0" class="secondary-button" text="Back" (tap)="goBack()"></Button>
-        <Button row="0" col="2" class="secondary-button" text="Next" (tap)="goNext(currentSignUpStep+1)"></Button>
+        <Button row="0" col="2" class="secondary-button" text="Next" [isEnabled]="isNextEnabled()" (tap)="goNext(currentSignUpStep+1)"></Button>
     </GridLayout>
     <ScrollView row="1" orientation="vertical">
 

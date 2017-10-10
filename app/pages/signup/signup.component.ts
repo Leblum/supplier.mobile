@@ -8,6 +8,7 @@ import { Router } from "@angular/router";
 import { UserService } from "../../../app/services/user.service";
 import { ISupplier } from "../../../app/models/supplier.model";
 import { Switch } from "tns-core-modules/ui/switch/switch";
+import {TextField} from 'ui/text-field'
 
 @Component({
     selector: "SignupComponent",
@@ -94,6 +95,16 @@ export class SignupComponent implements OnInit {
             return pickupAddress1 && pickupAddress2 && pickupCity && pickupState && pickupZip && pickupZip && pickupName && pickupPhone;
         }
         return true;
+    }
+
+    isNextEnabled(){
+        return false;
+    }
+    
+    isNextValid(){
+        if(this.currentSignUpStep == SignupSteps.name){
+            //return this.first
+        }
     }
 
     goNext(target: SignupSteps) {
