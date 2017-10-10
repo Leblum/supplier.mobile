@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
     @ViewChild("container") container: ElementRef;
 
     user: IUser;
-    public isLoginBusy: boolean = false;
+    public isBusy: boolean = false;
     public isRememberMeActive: boolean = false;
 
     constructor(private router: Router, private userService: UserService, private page: Page) {
@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
     }
 
     login() {
-        this.isLoginBusy = true;
+        this.isBusy = true;
         if (!this.userService.validateEmail(this.user)) {
             alert("Please enter a valid email address.");
             return;
@@ -47,11 +47,11 @@ export class LoginComponent implements OnInit {
         this.userService.login(this.user)
             .subscribe(() => {
                 this.router.navigate(["/home"]);
-                this.isLoginBusy = false;
+                this.isBusy = false;
             },
             (error) => {
                 alert("Unfortunately we could not find your account.")
-                this.isLoginBusy = false;
+                this.isBusy = false;
             });
     }
 
@@ -60,14 +60,14 @@ export class LoginComponent implements OnInit {
     }
 
     signUp() {
-        this.isLoginBusy = true;
+        this.isBusy = true;
         this.userService.register(this.user)
             .subscribe(() => {
-                this.isLoginBusy = false;
+                this.isBusy = false;
                 alert("Your account was successfully created.");
             },
             (error) => {
-                this.isLoginBusy = false;
+                this.isBusy = false;
                 alert("Unfortunately we were unable to create your account.")
             });
     }

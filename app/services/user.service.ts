@@ -11,34 +11,19 @@ export class UserService {
 
     constructor(private http: Http) { }
 
-    public register(user: IUser): Observable<void> {
+    public register(user: IUser): Observable<Response> {
         return this.http.post(
-            'https://dev.identity.leblum.io/api' + '/v1' + "/register",
-            {
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                password: user.password,
-                isTokenExpired: false,
-                isEmailVerified: false, 
-            }).catch(this.handleErrors);
+            'https://dev.identity.leblum.io/api' + '/v1' + "/register",user).catch(this.handleErrors);
     }
 
-    public login(user: IUser): Observable<void> {
+    public login(user: IUser): Observable<Response> {
         return this.http.post(
-            'https://dev.identity.leblum.io/api' + '/v1' + "/authenticate",
-            {
-                email: user.email,
-                password: user.password,
-            }).catch(this.handleErrors);
+            'https://dev.identity.leblum.io/api' + '/v1' + "/authenticate",user).catch(this.handleErrors);
     }
 
-    public submitForgotPasswordRequest(user: IUser): Observable<void>{
+    public submitForgotPasswordRequest(user: IUser): Observable<Response>{
         return this.http.post(
-            'https://dev.identity.leblum.io/api' + '/v1' + "/password-reset-request",
-            {
-                email: user.email,
-            }).catch(this.handleErrors);
+            'https://dev.identity.leblum.io/api' + '/v1' + "/password-reset-request",user).catch(this.handleErrors);
     }
 
     handleErrors(error: Response) {

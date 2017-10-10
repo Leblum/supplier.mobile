@@ -5,12 +5,14 @@ import {NativeScriptFormsModule} from "nativescript-angular/forms"
 import { SignupComponent } from "./signup.component";
 import { SignupRoutingModule } from "./signup-routing.module";
 import { UserService } from "../../../app/services/user.service";
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     imports: [
         NativeScriptModule,
         SignupRoutingModule,
-        NativeScriptFormsModule
+        NativeScriptFormsModule,
+        ReactiveFormsModule
     ],
     declarations: [
         SignupComponent,

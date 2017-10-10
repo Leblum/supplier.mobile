@@ -7,7 +7,8 @@ export enum SignupSteps{
     pickupDetails = 6,
     teamUrl = 7,
     agreeToTerms = 8,
-    thankYou = 9
+    submitData = 9,
+    thankYou = 10
 }
 
 export enum AddressType{

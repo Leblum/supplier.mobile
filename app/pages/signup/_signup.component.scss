@@ -2,6 +2,7 @@
 // other than “light”, switch the path to the alternative scheme,
 // for example '~nativescript-theme-core/scss/dark'.
 @import '~nativescript-theme-core/scss/light';
+
 // Custom common variables
 @import '../../app-variables';
 
@@ -23,10 +24,6 @@
     padding-right: 20;
   }
 
-// GridLayout {
-//   width:90%;
-// }
-
 Image {
   margin-bottom: 20;
 }
@@ -40,11 +37,15 @@ Button, TextField {
 // This seems to clear a weird UI bug where 
 // the buttons are 'active' with a light grey background especially the back button. 
 // I'm leaving these as bright colors in case I see this again.
-button:active{
+Button:active{
     background:rgb(190, 31, 10);
 }
-button:focus{
+Button:focus{
     background:rgb(190, 31, 10);
+}
+
+Button:disabled{
+    opacity: .5;
 }
 
 TextField{
@@ -64,11 +65,6 @@ Switch{
   background-color: $switch-color;
 }
 
-.submit-button {
-  background-color: $grey-dark;
-  color: $text-light;
-}
-
 .activity-indicator {
   color: $grey-light;
 }
@@ -85,6 +81,12 @@ Switch{
   border-width: 2px;
 }
 
+.field-label{
+    font-size: 20;
+    opacity: .7;
+    margin-bottom: -2;
+}
+
 .contact-title{
     font-size:20;
     font-weight: bold;
@@ -98,12 +100,16 @@ Switch{
 }
 
 .stepTitle{
-    font-size: 35%;
+    font-size: 35;
     color:$grey-light;
-    font-weight: bold;
     opacity: .7;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .validation-message{
-    color: $validation-message
+    color: $validation-message;
+    opacity: .5;
+    font-size:15;
+    margin-top: -10;
+    margin-bottom: 30;
 }
