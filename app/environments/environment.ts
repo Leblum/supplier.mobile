@@ -5,7 +5,9 @@
 
 export const environment = {
     production: false,
-    IdentityAPIBase: 'http://localhost:8080/api',
+    IdentityAPIBase: 'https://dev.identity.leblum.io/api',
     IdentityAPIVersion: '/v1',
+    ProductAPIBase: 'https://dev.product.leblum.io/api',
+    ProductAPIVersion: '/v1',
   };
   

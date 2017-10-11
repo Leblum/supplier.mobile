@@ -1,6 +1,8 @@
 export const environment = {
-    production: false,
-    IdentityAPIBase: 'http://dev.identity.leblum.io/api',
-    IdentityAPIVersion: '/v1',
+  production: false,
+  IdentityAPIBase: 'https://dev.identity.leblum.io/api',
+  IdentityAPIVersion: '/v1',
+  ProductAPIBase: 'https://dev.product.leblum.io/api',
+  ProductAPIVersion: '/v1',
   };
   

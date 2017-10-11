@@ -5,6 +5,7 @@ import "rxjs/add/operator/do";
 import "rxjs/add/operator/map";
 
 import { IUser } from "../models/index";
+import { environment } from "../../app/environments/environment";
 
 @Injectable()
 export class UserService {
@@ -13,17 +14,17 @@ export class UserService {
 
     public register(user: IUser): Observable<Response> {
         return this.http.post(
-            'https://dev.identity.leblum.io/api' + '/v1' + "/register",user).catch(this.handleErrors);
+            environment.IdentityAPIBase + environment.IdentityAPIVersion + "/register",user).catch(this.handleErrors);
     }
 
     public login(user: IUser): Observable<Response> {
         return this.http.post(
-            'https://dev.identity.leblum.io/api' + '/v1' + "/authenticate",user).catch(this.handleErrors);
+            environment.IdentityAPIBase + environment.IdentityAPIVersion + "/authenticate",user).catch(this.handleErrors);
     }
 
     public submitForgotPasswordRequest(user: IUser): Observable<Response>{
         return this.http.post(
-            'https://dev.identity.leblum.io/api' + '/v1' + "/password-reset-request",user).catch(this.handleErrors);
+            environment.IdentityAPIBase + environment.IdentityAPIVersion + "/password-reset-request",user).catch(this.handleErrors);
     }
 
     handleErrors(error: Response) {

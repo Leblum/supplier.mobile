@@ -6,6 +6,7 @@ import { SignupComponent } from "./signup.component";
 import { SignupRoutingModule } from "./signup-routing.module";
 import { UserService } from "../../../app/services/user.service";
 import { ReactiveFormsModule } from '@angular/forms';
+import { SupplierService } from "../../../app/services";
 
 @NgModule({
     imports: [
@@ -22,7 +23,8 @@ import { ReactiveFormsModule } from '@angular/forms';
         NO_ERRORS_SCHEMA
     ],
     providers:[
-        UserService
+        UserService,
+        SupplierService
     ]
 })
 export class SignupModule { }

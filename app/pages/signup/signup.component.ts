@@ -13,6 +13,8 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from "@angular/fo
 import * as utilityModule from 'utils/utils';
 import * as application from "application";
 import { AndroidApplication, AndroidActivityBackPressedEventData } from "application";
+import { IAuthenticationResponse } from "../../../app/models/authentication.model";
+import { SupplierService } from "../../../app/services";
 
 @Component({
     selector: "SignupComponent",
@@ -41,7 +43,13 @@ export class SignupComponent implements OnInit {
     public isTermsAgreedTo: boolean = false;
     public isBusy: boolean = false;
 
-    constructor(private cdr: ChangeDetectorRef, private fb: FormBuilder, private router: Router, public userService: UserService, private page: Page) {
+    constructor(private cdr: ChangeDetectorRef,
+        private fb: FormBuilder,
+        private router: Router,
+        public userService: UserService,
+        private page: Page,
+        private suppliserService: SupplierService
+    ) {
         //Need to create empty objects so there's no null ref.
         this.supplier.companyAddress = {};
         this.supplier.pickupAddress = {};
@@ -107,7 +115,7 @@ export class SignupComponent implements OnInit {
             data.cancel = true; // prevents default back button behavior, which kinda minimizes/closes the application. 
             this.goBack();
             this.cdr.detectChanges(); // tell angular to do change detection.  I think because this code is executed outside of angular's view
-          });
+        });
     }
 
     goBack() {
@@ -122,11 +130,11 @@ export class SignupComponent implements OnInit {
         return this.isStepValid(this.currentSignUpStep);
     }
 
-    openTermsAndConditions(){
+    openTermsAndConditions() {
         utilityModule.openUrl('http://leblum.com');
     }
 
-    termsAgreedCheckChanged(args){
+    termsAgreedCheckChanged(args) {
         if (<Switch>args.object.checked) {
             this.isTermsAgreedTo = true;
         } else {
@@ -157,17 +165,17 @@ export class SignupComponent implements OnInit {
         }
     }
 
-    prefillForm(){
+    prefillForm() {
         this.user = {
             firstName: 'Dave',
             lastName: 'Brown',
-            email: 'dbrown@leblum.com',
+            email: `${Math.floor(Math.random() * 1321)}dbrown@leblum.com`,
             phone: '303-949-6889',
             password: 'test1234',
         }
         this.supplier = {
-            name: 'Daves Flowers',
-            slug:'davesFlowers',
+            name: `${Math.floor(Math.random() * 1321)}Daves Flowers`,
+            slug: `${Math.floor(Math.random() * 1321)}davesFlowers`,
             companyEmail: 'info@daves.com',
             companyPhone: '303-949-6889',
             companyAddress: {
@@ -179,7 +187,7 @@ export class SignupComponent implements OnInit {
                 type: AddressType.business
             },
             pickupName: 'Jose',
-            pickupAddress:{
+            pickupAddress: {
                 street1: 'Pickup St St.',
                 street2: '#4A',
                 city: 'New York',
@@ -189,28 +197,70 @@ export class SignupComponent implements OnInit {
             },
             pickupPhone: '303-688-8888',
         }
-        //this.isTermsAgreedTo = true;
+        this.isTermsAgreedTo = true;
     }
 
     goNext(target: SignupSteps) {
         if (this.isStepValid(target - 1)) {
             this.currentSignUpStep = target;
-            if(this.currentSignUpStep === SignupSteps.submitData){
-                // Here we're finally ready to submit this data back to the api
-                // First we're going to create a user.
-                this.isBusy = true;
-                this.userService.register(this.user).subscribe(response =>{
-                    if(response.status == 200){
-                        let userResponse: IUser = response.json();
-                        // Now we have a registered user.  
-                        // He's only tied into the guest organization though.  Time to create a supplier and tie them together. 
-                    }
-                    this.isBusy = false;
-                });
+            if (this.currentSignUpStep === SignupSteps.submitData) {
+                this.registerSupplierAndUser();
             }
         }
-        else{
+        else {
             alert('Please fill out all the required fields on the form.');
+        }
+    }
+
+    registerSupplierAndUser() {
+        // Here we're finally ready to submit this data back to the api
+        // First we're going to create a user.
+        try {
+            this.isBusy = true;
+            console.log('About to register supplier, and user');
+            this.userService.register(this.user).subscribe(response => {
+
+                if (response.status != 201) {
+                    throw ('There was a problem registering the user');
+                }
+
+                console.log(response);
+                let userResponse: IUser = response.json();
+                // We need to authenticate the user, even though he's in the guest org,
+                // we're going to auth him, get a token, and use that token on the supplier API.  The supplier API
+                // will be checking tokens for guest role, so our supplier registration isn't totally open. 
+                this.userService.login(this.user).subscribe(response => {
+
+                    // Now we grab the token off this guy.
+                    if (response.status != 200) {
+                        throw ('There was a problem authenticating the user');
+                    }
+
+                    const authenticationResponse: IAuthenticationResponse = response.json();
+                    console.log(`Initial Auth after user registration Response: ${authenticationResponse.token}`);
+
+                    // Now we're going to call out to the API, and register the supplier.  This will also move the user
+                    // into a new organization, so that he can "own" the supplier that is created.  so a re-auth will be needed to grab a 
+                    /// new token once we register
+                    this.suppliserService.register(this.supplier, authenticationResponse.token).subscribe(response => {
+                        let registeredSupplierResponse: ISupplier = response.json();
+                        console.log(`Registered Supplier Response ${registeredSupplierResponse._id}`);
+
+                        // Now we reauth the user again.
+                        this.userService.login(this.user).subscribe(response => {
+                            let finalAuthResponse: IAuthenticationResponse = response.json();
+                            console.log(`Created user token: ${finalAuthResponse.token}`);
+                        });
+                        this.isBusy = false;
+                        alert('Registration Successful!');
+                    });
+
+                });
+            });
+        }
+        catch (err) {
+            this.isBusy = false;
+            alert(`There was an error registering the user and supplier: ${err}`);
         }
     }
 }
