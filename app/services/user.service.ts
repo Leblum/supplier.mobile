@@ -6,29 +6,50 @@ import "rxjs/add/operator/map";
 
 import { IUser } from "../models/index";
 import { environment } from "../../app/environments/environment";
+import * as applicationSettings from "application-settings";
+import { CONST } from "../../app/constants";
+import { IAuthenticationResponse } from "../../app/models/authentication.interface";
+import { BaseService } from "../../app/services/base/base.service";
+
 
 @Injectable()
-export class UserService {
+export class UserService extends BaseService<IUser> {
 
-    constructor(private http: Http) { }
+    constructor(public http: Http) {
+        super(http, {
+            rootApiUrl: `${environment.IdentityAPIBase}${environment.V1}`,
+            urlSuffix: 'users'
+        });
+    }
 
     public register(user: IUser): Observable<Response> {
         return this.http.post(
-            environment.IdentityAPIBase + environment.IdentityAPIVersion + "/register",user).catch(this.handleErrors);
+            this.serviceConfig.rootApiUrl + CONST.ep.REGISTER ,user).catch(this.handleErrors);
     }
 
-    public login(user: IUser): Observable<Response> {
+    private login(user: IUser): Observable<Response> {
         return this.http.post(
-            environment.IdentityAPIBase + environment.IdentityAPIVersion + "/authenticate",user).catch(this.handleErrors);
+            this.serviceConfig.rootApiUrl + CONST.ep.AUTHENTICATE,user).catch(this.handleErrors);
+    }
+
+    public authenticate(user:IUser): Observable<IAuthenticationResponse>{
+       return this.login(user).map((response)=>{
+            if(response.status != 200){
+                throw (`There was a problem authenticating the user err:${response.text()}`);
+            }
+            const authResponse: IAuthenticationResponse = response.json();
+            applicationSettings.setString(CONST.CLIENT_TOKEN_LOCATION, response.json().token);
+            return authResponse;
+        });
     }
 
     public submitForgotPasswordRequest(user: IUser): Observable<Response>{
         return this.http.post(
-            environment.IdentityAPIBase + environment.IdentityAPIVersion + "/password-reset-request",user).catch(this.handleErrors);
+            this.serviceConfig.rootApiUrl + CONST.ep.PASSWORD_RESET_REQUEST, user).catch(this.handleErrors);
     }
 
     handleErrors(error: Response) {
-        console.log(JSON.stringify(error.json()));
+        console.error(JSON.stringify(error.json()));
         return Observable.throw(error);
     }
 

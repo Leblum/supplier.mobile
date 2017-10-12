@@ -1,4 +1,4 @@
-import { IAddress } from "../../app/models/address.model";
+import { IAddress } from "../../app/models/address.interface";
 
 export interface ISupplier {
     _id?: string,

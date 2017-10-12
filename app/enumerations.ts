@@ -16,3 +16,9 @@ export enum AddressType{
     business = 2,
     billing = 3,
 }
+
+export const MimeType = {
+    JSON: 'application/json',
+    MULTIPART: 'multipart/form-data',
+    TEXT: 'text/plain'
+};

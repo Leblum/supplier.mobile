@@ -4,9 +4,8 @@ import {NativeScriptFormsModule} from "nativescript-angular/forms"
 
 import { SignupComponent } from "./signup.component";
 import { SignupRoutingModule } from "./signup-routing.module";
-import { UserService } from "../../../app/services/user.service";
 import { ReactiveFormsModule } from '@angular/forms';
-import { SupplierService } from "../../../app/services";
+import { SupplierService, UserService } from "../../../app/services";
 
 @NgModule({
     imports: [
@@ -22,9 +21,6 @@ import { SupplierService } from "../../../app/services";
     schemas: [
         NO_ERRORS_SCHEMA
     ],
-    providers:[
-        UserService,
-        SupplierService
-    ]
+    providers:[]
 })
 export class SignupModule { }

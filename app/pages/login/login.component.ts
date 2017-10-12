@@ -44,8 +44,8 @@ export class LoginComponent implements OnInit {
             alert("Please enter a valid email address.");
             return;
         }
-        this.userService.login(this.user)
-            .subscribe(() => {
+        this.userService.authenticate(this.user)
+            .subscribe(authResponse => {
                 this.router.navigate(["/home"]);
                 this.isBusy = false;
             },

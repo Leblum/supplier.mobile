@@ -8,10 +8,11 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { LoginComponent } from "../app/pages/login/login.component";
 import { ForgotPasswordComponent } from "../app/pages/forgot-password/forgot-password.component";
+import { SupplierService, UserService } from "../app/services";
 
 @NgModule({
     bootstrap: [
-        AppComponent
+        AppComponent,
     ],
     imports: [
         NativeScriptModule,
@@ -25,7 +26,9 @@ import { ForgotPasswordComponent } from "../app/pages/forgot-password/forgot-pas
         ForgotPasswordComponent
     ],
     providers: [
-        { provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader }
+        { provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader },
+        UserService,
+        SupplierService,
     ],
     schemas: [
         NO_ERRORS_SCHEMA

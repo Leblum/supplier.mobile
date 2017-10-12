@@ -1,3 +1,4 @@
-export * from './user.model';
-export * from './role.model';
-export * from './supplier.model';
+export * from './user.interface';
+export * from './role.interface';
+export * from './supplier.interface';
+export * from './base/base-model.interface';
