@@ -8,7 +8,14 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { LoginComponent } from "../app/pages/login/login.component";
 import { ForgotPasswordComponent } from "../app/pages/forgot-password/forgot-password.component";
-import { SupplierService, UserService } from "../app/services";
+import { SupplierService, UserService, AlertService } from "../app/services";
+import { AlertComponent } from "../app/directives/alert.component";
+import { ErrorEventBus } from "../app/event-buses/error.event-bus";
+import { AuthGuard } from "../app/guards/auth.gaurd";
+import { ReactiveFormsModule } from "@angular/forms";
+import { SharedModule } from "../app/shared/shared.module";
+import { SignupModule } from "../app/pages/signup/signup.module";
+import { TabsModule } from "../app/tabs/tabs.module";
 
 @NgModule({
     bootstrap: [
@@ -17,18 +24,23 @@ import { SupplierService, UserService } from "../app/services";
     imports: [
         NativeScriptModule,
         AppRoutingModule,
-        NativeScriptFormsModule,
         NativeScriptHttpModule,
+        NativeScriptFormsModule,
+        ReactiveFormsModule,
     ],
     declarations: [
         AppComponent,
         LoginComponent,
-        ForgotPasswordComponent
+        ForgotPasswordComponent,
+        AlertComponent
     ],
     providers: [
         { provide: NgModuleFactoryLoader, useClass: NSModuleFactoryLoader },
         UserService,
         SupplierService,
+        AlertService,
+        ErrorEventBus,
+        AuthGuard
     ],
     schemas: [
         NO_ERRORS_SCHEMA

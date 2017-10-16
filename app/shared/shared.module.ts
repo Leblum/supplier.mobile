@@ -2,27 +2,24 @@ import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { NativeScriptModule } from "nativescript-angular/nativescript.module";
 import {NativeScriptFormsModule} from "nativescript-angular/forms"
 
-import { SignupComponent } from "./signup.component";
-import { SignupRoutingModule } from "./signup-routing.module";
 import { ReactiveFormsModule } from '@angular/forms';
-import { SupplierService, UserService } from "../../../app/services";
-import { SharedModule } from "../../../app/shared/shared.module";
-
+import { SettingsComponent } from "../../app/shared/settings/settings.component";
 
 @NgModule({
     imports: [
         NativeScriptModule,
-        SignupRoutingModule,
         NativeScriptFormsModule,
-        ReactiveFormsModule,
-        SharedModule
+        ReactiveFormsModule
     ],
     declarations: [
-        SignupComponent
+        SettingsComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA
     ],
-    providers:[]
+    providers:[],
+    exports:[
+        SettingsComponent
+    ]
 })
-export class SignupModule { }
+export class SharedModule { }

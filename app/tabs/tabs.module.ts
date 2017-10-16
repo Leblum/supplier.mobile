@@ -5,14 +5,16 @@ import { BrowseComponent } from "./browse/browse.component";
 import { FeaturedComponent } from "./featured/featured.component";
 import { HomeComponent } from "./home/home.component";
 import { SearchComponent } from "./search/search.component";
-import { SettingsComponent } from "./settings/settings.component";
+import { SettingsTabComponent } from "./settings/settings-tab.component";
 import { TabsRoutingModule } from "./tabs-routing.module";
 import { TabsComponent } from "./tabs.component";
+import { SharedModule } from "../../app/shared/shared.module";
 
 @NgModule({
     imports: [
         NativeScriptModule,
-        TabsRoutingModule
+        TabsRoutingModule,
+        SharedModule
     ],
     declarations: [
         TabsComponent,
@@ -20,7 +22,7 @@ import { TabsComponent } from "./tabs.component";
         BrowseComponent,
         SearchComponent,
         FeaturedComponent,
-        SettingsComponent
+        SettingsTabComponent
     ],
     schemas: [
         NO_ERRORS_SCHEMA

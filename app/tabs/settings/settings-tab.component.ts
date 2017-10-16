@@ -3,9 +3,9 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 @Component({
     selector: "Settings",
     moduleId: module.id,
-    templateUrl: "./settings.component.html"
+    templateUrl: "./settings-tab.component.html"
 })
-export class SettingsComponent implements OnInit {
+export class SettingsTabComponent implements OnInit {
     constructor() {
         /* ***********************************************************
         * Use the constructor to inject services.

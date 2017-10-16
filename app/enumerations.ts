@@ -22,3 +22,11 @@ export const MimeType = {
     MULTIPART: 'multipart/form-data',
     TEXT: 'text/plain'
 };
+
+export enum NotificationType {
+    info = 1,
+    success = 2,
+    warning = 3,
+    danger = 4,
+    empty = 5
+}

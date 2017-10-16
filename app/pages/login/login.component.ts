@@ -7,6 +7,9 @@ import { View } from "ui/core/view";
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { ActivityIndicator } from "ui/activity-indicator";
 import  * as applicationSettings from 'application-settings';
+import { AlertService } from "../../../app/services";
+import { NotificationType } from "../../../app/enumerations";
+import { ErrorEventBus } from "../../../app/event-buses/error.event-bus";
 
 
 @Component({
@@ -22,7 +25,7 @@ export class LoginComponent implements OnInit {
     public isBusy: boolean = false;
     public isRememberMeActive: boolean = false;
 
-    constructor(private router: Router, private userService: UserService, private page: Page) {
+    constructor(private router: Router, private userService: UserService, private page: Page, private alertService: AlertService, private errorEventBus: ErrorEventBus) {
         // For testing
         this.user = {
             email: 'tester@leblum.com',
@@ -41,7 +44,10 @@ export class LoginComponent implements OnInit {
     login() {
         this.isBusy = true;
         if (!this.userService.validateEmail(this.user)) {
-            alert("Please enter a valid email address.");
+            this.alertService.send({
+                notificationType: NotificationType.warning,
+                text:'Please enter a valid email address.',
+            });
             return;
         }
         this.userService.authenticate(this.user)
@@ -50,25 +56,12 @@ export class LoginComponent implements OnInit {
                 this.isBusy = false;
             },
             (error) => {
-                alert("Unfortunately we could not find your account.")
+                this.errorEventBus.throw(error);
                 this.isBusy = false;
             });
     }
 
     navigateToSignup(){
         this.router.navigate(['/signup']);
-    }
-
-    signUp() {
-        this.isBusy = true;
-        this.userService.register(this.user)
-            .subscribe(() => {
-                this.isBusy = false;
-                alert("Your account was successfully created.");
-            },
-            (error) => {
-                this.isBusy = false;
-                alert("Unfortunately we were unable to create your account.")
-            });
     }
 }

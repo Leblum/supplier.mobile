@@ -52,7 +52,7 @@ export class SupplierService extends BaseService<ISupplier> {
             })
             // Register the supplier, with the new token.
             .flatMap(token => {
-                console.log(`About to try and register a supplier`)
+                console.log(`About to try and register a supplier ${token}`)
                 return this.register(supplier, token);
             })
             // double check that our registration worked.

@@ -3,6 +3,7 @@ import { Routes } from "@angular/router";
 import { NativeScriptRouterModule } from "nativescript-angular/router";
 import { LoginComponent } from "../app/pages/login/login.component";
 import { ForgotPasswordComponent } from "../app/pages/forgot-password/forgot-password.component";
+import { AuthGuard } from "../app/guards/auth.gaurd";
 
 const routes: Routes = [
     // For testing we're going to head to forgot password first.
@@ -10,7 +11,7 @@ const routes: Routes = [
     { path: "", loadChildren: "./pages/signup/signup.module#SignupModule" },
     { path: "login", component: LoginComponent },
     { path: "forgot-password", component: ForgotPasswordComponent },
-    { path: "home", loadChildren: "./tabs/tabs.module#TabsModule" },
+    { path: "home", loadChildren: "./tabs/tabs.module#TabsModule", canActivate: [AuthGuard]  },
     { path: "signup", loadChildren: "./pages/signup/signup.module#SignupModule" }
 ];
 

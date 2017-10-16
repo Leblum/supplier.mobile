@@ -14,7 +14,6 @@ export const CONST = {
         PASSWORD_RESET_REQUEST: '/password-reset-request',
         PRODUCTS: '/products',
     },
-    CLIENT_DECODED_TOKEN_LOCATION: 'decoded-token',
     CLIENT_TOKEN_LOCATION: 'token',
     MOMENT_DATE_FORMAT: 'YYYY-MM-DD h:mm:ss a Z',
     // These error codes are returned from the server to make it easier to programattically handle certain errrors.

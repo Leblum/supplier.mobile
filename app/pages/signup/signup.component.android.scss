@@ -1,9 +1,2 @@
 @import 'signup.component';
 
-// Place any CSS rules you want to apply only on Android here
-TabView {
-    tab-text-color: $grey-dark;
-    selected-tab-text-color: $grey-dark;
-    android-selected-tab-text-color: $grey-dark;
-    android-selected-tab-highlight-color: $item-active-color;
-}
