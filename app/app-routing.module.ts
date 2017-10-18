@@ -7,8 +7,8 @@ import { AuthGuard } from "../app/guards/auth.gaurd";
 
 const routes: Routes = [
     // For testing we're going to head to forgot password first.
-    //{ path: "", component: LoginComponent },
-    { path: "", loadChildren: "./pages/signup/signup.module#SignupModule" },
+    { path: "", component: LoginComponent },
+    //{ path: "", loadChildren: "./pages/signup/signup.module#SignupModule" },
     { path: "login", component: LoginComponent },
     { path: "forgot-password", component: ForgotPasswordComponent },
     { path: "home", loadChildren: "./tabs/tabs.module#TabsModule", canActivate: [AuthGuard]  },

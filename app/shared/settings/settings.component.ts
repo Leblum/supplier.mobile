@@ -117,11 +117,13 @@ export class SettingsComponent implements OnInit {
         this.page.actionBarHidden = true;
         // If we're on android we need the back button to handle our "fake pages", so we're going to 
         // listen for the activity, and then "go back" whenever the hardware button is pressed.
-        application.android.on(AndroidApplication.activityBackPressedEvent, (data: AndroidActivityBackPressedEventData) => {
-            data.cancel = true; // prevents default back button behavior, which kinda minimizes/closes the application. 
-            this.goBack();
-            this.cdr.detectChanges(); // tell angular to do change detection.  I think because this code is executed outside of angular's view
-        });
+        if(application.android){
+            application.android.on(AndroidApplication.activityBackPressedEvent, (data: AndroidActivityBackPressedEventData) => {
+                data.cancel = true; // prevents default back button behavior, which kinda minimizes/closes the application. 
+                this.goBack();
+                this.cdr.detectChanges(); // tell angular to do change detection.  I think because this code is executed outside of angular's view
+            });
+        }
     }
 
     goBack() {

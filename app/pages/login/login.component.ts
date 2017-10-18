@@ -10,13 +10,14 @@ import  * as applicationSettings from 'application-settings';
 import { AlertService } from "../../../app/services";
 import { NotificationType } from "../../../app/enumerations";
 import { ErrorEventBus } from "../../../app/event-buses/error.event-bus";
+import * as application from "application";
 
 
 @Component({
     selector: "login-page",
     providers: [UserService],
     templateUrl: "pages/login/login.html",
-    styleUrls: ["pages/login/login-common.css", "pages/login/login.css"]
+    styleUrls: ["pages/login/login.component.css"]
 })
 export class LoginComponent implements OnInit {
     @ViewChild("container") container: ElementRef;
@@ -59,6 +60,10 @@ export class LoginComponent implements OnInit {
                 this.errorEventBus.throw(error);
                 this.isBusy = false;
             });
+    }
+
+    getLogoImage(): string{
+        return application.android ? 'res://logo_login' : 'res://lbresources/logo_login';
     }
 
     navigateToSignup(){

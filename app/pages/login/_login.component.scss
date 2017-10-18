@@ -8,11 +8,6 @@
   padding-bottom:20;
 }
 
-GridLayout {
-  width:90%;
-  height:60%
-}
-
 Image {
   margin-bottom: 20;
 }
@@ -31,18 +26,14 @@ Label{
   margin-bottom: 10;
 }
 
-Switch{
-  margin-bottom: 10;
-  margin-left:-5;
-  margin-top:-5;
-}
-
 .secondary-button{
   background-color: $text-light;
   color: $grey-light;
   width: 40%;
   margin-left:20;
   margin-right:20;
+  margin-top:40;
+  margin-bottom:40;
   // This will remove the border around the secondary buttons, you can remove it
   // if this isn't needed.
   background-color: rgba(255, 0, 0, 0.0);
@@ -50,3 +41,7 @@ Switch{
   border-width: 1;
 }
 
+.logo{
+  margin-top: 40;
+  margin-bottom: 40;
+}
