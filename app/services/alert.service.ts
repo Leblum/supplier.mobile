@@ -17,17 +17,17 @@ export class AlertService {
  
     constructor(private router: Router) {
         // clear alert message on route change
-        router.events.subscribe(event => {
-            if (event instanceof NavigationStart) {
-                if (this.keepAfterNavigationChange) {
-                    // only keep for a single location change
-                    this.keepAfterNavigationChange = false;
-                } else {
-                    // clear alert
-                    this.messageSource.next();
-                }
-            }
-        });
+        // router.events.subscribe(event => {
+        //     if (event instanceof NavigationStart) {
+        //         if (this.keepAfterNavigationChange) {
+        //             // only keep for a single location change
+        //             this.keepAfterNavigationChange = false;
+        //         } else {
+        //             // clear alert
+        //             this.messageSource.next();
+        //         }
+        //     }
+        // });
     }
  
     send(message: IMessage, showAfterNavigationChange = false) {

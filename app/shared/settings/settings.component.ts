@@ -43,6 +43,8 @@ export class SettingsComponent implements OnInit {
     public isPickupSame: boolean = false;
     public isTermsAgreedTo: boolean = false;
     public isBusy: boolean = false;
+    public hasSubmitted: boolean = false;
+    public passwordConfirm: string = '';
 
     constructor(private cdr: ChangeDetectorRef,
         private fb: FormBuilder,
@@ -68,6 +70,7 @@ export class SettingsComponent implements OnInit {
         });
         this.passwordForm = this.fb.group({
             "password": ["password", [Validators.required]],
+            "passwordConfirm": ["passwordConfirm", [Validators.required]],
         });
         this.companyInfoForm = this.fb.group({
             "companyName": ["companyName", [Validators.required]],
@@ -128,8 +131,10 @@ export class SettingsComponent implements OnInit {
 
     goBack() {
         this.isBusy = false;
-        this.currentSignUpStep = --this.currentSignUpStep;
+
+        this.currentSignUpStep = this.currentSignUpStep == 0 ? this.currentSignUpStep : --this.currentSignUpStep;
         if (this.currentSignUpStep == 0) {
+            this.isBusy = true;
             this.router.navigate(['login']);
         }
     }
@@ -159,7 +164,7 @@ export class SettingsComponent implements OnInit {
             case SignupSteps.phone:
                 return this.phoneForm.valid;
             case SignupSteps.password:
-                return this.passwordForm.valid;
+                return this.passwordForm.valid && this.user.password === this.passwordConfirm;
             case SignupSteps.companyInfo:
                 return this.companyInfoForm.valid;
             case SignupSteps.pickupDetails:
@@ -205,22 +210,24 @@ export class SettingsComponent implements OnInit {
             },
             pickupPhone: '303-688-8888',
         }
+        this.passwordConfirm = 'test1234';
         this.isTermsAgreedTo = true;
     }
 
     goNext(target: SignupSteps) {
-        if(!this.isStepValid(target - 1)){
+        if(!this.isStepValid(this.currentSignUpStep)){
             this.alertService.send({
-                notificationType: NotificationType.warning,
+                notificationType: NotificationType.validationError,
                 text: 'Please correct the errors on the form.',
                 title: 'Validation Warning'
             });
             return;
         }
-
-        this.currentSignUpStep = target;
-        if (this.currentSignUpStep === SignupSteps.submitData) {
+        if(this.currentSignUpStep === SignupSteps.submitData && !this.hasSubmitted){
             this.registerSupplierAndUser();
+            this.hasSubmitted = true;
+        } else{
+            this.currentSignUpStep = target;
         }
     }
 
@@ -235,10 +242,11 @@ export class SettingsComponent implements OnInit {
             this.isBusy = true;
             this.suppliserService.createNewSupplierTeam(this.supplier,this.user).subscribe(authResponse=>{
                 this.isBusy = false;
-                this.alertService.send({
-                    notificationType: NotificationType.success,
-                    text: 'Registration was successful.',
-                });
+                // this.alertService.send({
+                //     notificationType: NotificationType.success,
+                //     text: 'Registration was successful.',
+                // });
+                console.log('Sending to home after successfull registration.')
                 this.router.navigate(["/home"]);
             })
         }

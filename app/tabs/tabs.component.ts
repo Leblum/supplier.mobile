@@ -26,6 +26,7 @@ export class TabsComponent implements OnInit {
         * navigation layout as a whole.
         *************************************************************/
         this.page.actionBarHidden = true;
+        console.log('In On Init of tabs component.')
     }
 
     get title(): string {

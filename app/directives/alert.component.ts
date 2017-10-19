@@ -45,28 +45,14 @@ export class AlertComponent {
                 case NotificationType.info:
                     message.title = 'Alert';
                     break;
-                case NotificationType.warning:
+                case NotificationType.validationError:
                     message.title = 'Validation Error';
                     break;
+                case NotificationType.warning:
+                    message.title = 'Warning';
+                    break;
                 default:
                     break;
-            }
-        }
-    }
-
-    calculateTimerDelay(message: IMessage): number {
-        if (message && message.notificationType) {
-            switch (+message.notificationType) {
-                case NotificationType.danger:
-                    return 5000;
-                case NotificationType.info:
-                    return 1000;
-                case NotificationType.warning:
-                    return 5000;
-                case NotificationType.success:
-                    return 1000;
-                default:
-                    return 1000;
             }
         }
     }
@@ -78,7 +64,7 @@ export class AlertComponent {
                     return "ti-alert";
                 case NotificationType.info:
                     return "ti-info";
-                case NotificationType.warning:
+                case NotificationType.validationError:
                     return "ti-bell";
                 case NotificationType.success:
                     return "ti-check";

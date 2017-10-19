@@ -26,7 +26,8 @@ export const MimeType = {
 export enum NotificationType {
     info = 1,
     success = 2,
-    warning = 3,
+    validationError = 3,
     danger = 4,
-    empty = 5
+    empty = 5,
+    warning = 6,
 }

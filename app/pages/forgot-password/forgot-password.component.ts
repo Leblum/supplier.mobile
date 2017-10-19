@@ -16,7 +16,7 @@ import { AlertService } from "../../../app/services";
     selector: "forgot-password-page",
     providers: [UserService],
     templateUrl: "pages/forgot-password/forgot-password.html",
-    styleUrls: ["pages/forgot-password/forgot-password.common.css", "pages/forgot-password/forgot-password.css"]
+    styleUrls: ["pages/forgot-password/forgot-password.component.css" ]
 })
 export class ForgotPasswordComponent implements OnInit {
     @ViewChild("container") container: ElementRef;
@@ -42,7 +42,7 @@ export class ForgotPasswordComponent implements OnInit {
         if(!this.userService.validateEmail({email: this.email})){
             this.isBusy = false;
             this.alertService.send({
-                notificationType: NotificationType.warning,
+                notificationType: NotificationType.validationError,
                 text:'Please enter a valid email address.',
             });
             return;

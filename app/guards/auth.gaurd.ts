@@ -11,9 +11,10 @@ export class AuthGuard implements CanActivate {
     constructor(private router: Router, private alertService: AlertService) { }
  
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        console.log('Checking auth token for user.');
         if (!applicationSettings.getString(CONST.CLIENT_TOKEN_LOCATION)) {
-            
-            // logged in so return true
+            console.log('Auth token not found in storage, sending to login.');
+            // Not logged in so send them to login.
             this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }});
             this.alertService.send({
                 notificationType: NotificationType.danger,

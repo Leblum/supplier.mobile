@@ -33,7 +33,24 @@
                 <Label row="4" class="validation-message" [visibility]="emailForm.invalid ? 'visible': 'hidden'"
                     text="* Required and should be name@company.com"></Label>
 
+            </GridLayout>
 
+
+            <GridLayout [formGroup]="passwordForm" *ngIf="currentSignUpStep == signupSteps.password || isSettingsForm" class="wrapper"
+                rows="auto,30, auto, auto, auto, auto, auto, auto, auto">
+            
+                <Label row="0" col="0" class="stepTitle" text="Create a password"></Label>
+            
+                <Label row="2" class="field-label" text="Password"></Label>
+                <TextField row="3" col="0" formControlName="password" required minlength="6" returnKeyType="next" secure="true" hint="Password"
+                    [(ngModel)]="user.password" autocorrect="false" autocapitalizationType="none" ></TextField>
+                <Label row="4" class="validation-message" [visibility]="passwordForm.controls.password.invalid ? 'visible': 'hidden'" text="* Required and must be at least 6 chars"></Label>
+                
+                <Label row="5" class="field-label" text="Confirm Password"></Label>
+                <TextField row="6" col="0" [(ngModel)]="passwordConfirm" formControlName="passwordConfirm" 
+                required minlength="6" returnKeyType="next" secure="true" hint="Password" autocorrect="false" autocapitalizationType="none" 
+                (returnPress)="goNext(signupSteps.companyInfo)"></TextField>
+                <Label row="7" class="validation-message" [visibility]="passwordForm.controls.passwordConfirm.value != passwordForm.controls.password.value ? 'visible': 'hidden'" text="* Password must match"></Label>
             </GridLayout>
 
             <GridLayout [formGroup]="phoneForm" *ngIf="currentSignUpStep == signupSteps.phone || isSettingsForm" class="wrapper" rows="auto,30, auto, auto, auto">
@@ -46,17 +63,6 @@
                     (returnPress)="goNext(signupSteps.password)"></TextField>
                 <Label row="4" class="validation-message" [visibility]="phoneForm.invalid ? 'visible': 'hidden'"
                     text="* Required and format should be 123-123-1234"></Label>
-            </GridLayout>
-
-            <GridLayout [formGroup]="passwordForm" *ngIf="currentSignUpStep == signupSteps.password || isSettingsForm" class="wrapper" rows="auto,30, auto, auto, auto">
-
-                <Label row="0" col="0" class="stepTitle" text="Create a password"></Label>
-
-                <Label row="2" class="field-label" text="Password"></Label>
-                <TextField row="3" col="0" formControlName="password" required minlength="6" returnKeyType="next" secure="true" hint="Password"
-                    [(ngModel)]="user.password" autocorrect="false" autocapitalizationType="none" (returnPress)="goNext(signupSteps.companyInfo)"></TextField>
-                <Label row="4" class="validation-message" [visibility]="passwordForm.invalid ? 'visible': 'hidden'"
-                    text="* Required and must be at least 6 chars"></Label>
             </GridLayout>
 
             <GridLayout [formGroup]="companyInfoForm" *ngIf="currentSignUpStep == signupSteps.companyInfo || isSettingsForm" class="wrapper" rows="auto, 30, auto, auto, auto, auto, auto, auto, auto, auto, auto">
@@ -158,6 +164,9 @@
 
             </GridLayout>
             <Button class="submit-button" *ngIf="isSettingsForm" text="Save" (tap)="save()"></Button>
+            <GridLayout rows="300,auto">
+
+            </GridLayout>
         </StackLayout>
     </ScrollView>
 </GridLayout>

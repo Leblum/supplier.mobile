@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
         this.isBusy = true;
         if (!this.userService.validateEmail(this.user)) {
             this.alertService.send({
-                notificationType: NotificationType.warning,
+                notificationType: NotificationType.validationError,
                 text:'Please enter a valid email address.',
             });
             return;
