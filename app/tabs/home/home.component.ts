@@ -1,4 +1,6 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { UserService } from "../../../app/services";
 
 @Component({
     selector: "Home",
@@ -6,7 +8,7 @@ import { Component, OnInit } from "@angular/core";
     templateUrl: "./home.component.html"
 })
 export class HomeComponent implements OnInit {
-    constructor() {
+    constructor(private router: Router, private userService: UserService) {
         /* ***********************************************************
         * Use the constructor to inject services.
         *************************************************************/
@@ -16,5 +18,10 @@ export class HomeComponent implements OnInit {
         /* ***********************************************************
         * Use the "ngOnInit" handler to initialize data for the view.
         *************************************************************/
+    }
+
+    logout(){
+        this.userService.logout();
+        this.router.navigate(['/login']);
     }
 }

@@ -26,12 +26,6 @@ Image {
   margin-bottom: 20;
 }
 
-Button, TextField {
-  margin-left: 16;
-  margin-right: 16;
-  margin-bottom: 20;
-}
-
 // This seems to clear a weird UI bug where 
 // the buttons are 'active' with a light grey background especially the back button. 
 // I'm leaving these as bright colors in case I see this again.
@@ -61,22 +55,6 @@ Switch{
   margin-left:-5;
   margin-top:-5;
   background-color: $switch-color;
-}
-
-.activity-indicator {
-  color: $grey-light;
-}
-
-.secondary-button{
-  background-color: $text-light;
-  color: $grey-dark;
-  width: 30%;
-  font-weight: bold;
-  // This will remove the border around the secondary buttons, you can remove it
-  // if this isn't needed.
-  background-color: rgba(255, 0, 0, 0.0);
-  border-color:rgba(255, 0, 0, 0.0);
-  border-width: 2px;
 }
 
 .field-label{
@@ -112,3 +90,7 @@ Switch{
     margin-bottom: 30;
 }
 
+.secondary-button{
+margin-top: 10;
+font-weight: bold;
+}

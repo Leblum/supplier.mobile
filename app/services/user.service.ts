@@ -43,6 +43,10 @@ export class UserService extends BaseService<IUser> {
         });
     }
 
+    public logout(){
+        applicationSettings.remove(CONST.CLIENT_TOKEN_LOCATION);
+    }
+
     public submitForgotPasswordRequest(user: IUser): Observable<Response>{
         return this.http.post(
             this.serviceConfig.rootApiUrl + CONST.ep.PASSWORD_RESET_REQUEST, user).catch(this.handleErrors);

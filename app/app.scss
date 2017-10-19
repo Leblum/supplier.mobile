@@ -40,6 +40,18 @@
     }
 }
 
+
+Button, TextField {
+    margin-left: 16;
+    margin-right: 16;
+    margin-bottom: 20;
+}
+
+
+.activity-indicator {
+    color: $grey-light;
+  }
+
 //Action bar
 ActionBar .action-bar-title {
     horizontal-align: center;
@@ -52,6 +64,27 @@ ActivityIndicator{
 .submit-button {
     background-color: $grey-dark;
     color: $text-light;
+  }
+
+
+.dimmer{
+    background-color: rgb(65, 65, 65);
+    opacity: .5;
+}
+
+.secondary-button{
+    background-color: $text-light;
+    color: $grey-light;
+    width: 40%;
+    margin-left:20;
+    margin-right:20;
+    margin-top:40;
+    margin-bottom:40;
+    // This will remove the border around the secondary buttons, you can remove it
+    // if this isn't needed.
+    background-color: rgba(255, 0, 0, 0.0);
+    border-color:rgba(255, 0, 0, 0.0);
+    border-width: 1;
   }
 
 // .background-image {

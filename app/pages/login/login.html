@@ -1,18 +1,27 @@
-<StackLayout>
-<GridLayout class="wrapper" rows="auto, auto, auto, auto, auto, auto" columns="auto, auto">
-  <Image row="0" colSpan="2" class="logo"  [src]="getLogoImage()" stretch="none" horizontalAlignment="center"></Image>
-  
-  <TextField row="1" colSpan="2" hint="Email Address" keyboardType="email" [(ngModel)]="user.email" autocorrect="false" autocapitalizationType="none"></TextField>
-  <TextField row="2" colSpan="2" hint="Password" secure="true" [(ngModel)]="user.password" returnKeyType="done" (returnPress)="login()"></TextField>
 
-  <Button row="3" colSpan="2" text="Sign In" class="submit-button" (tap)="login()"></Button>
-  <GridLayout row="4" colSpan="2"  rows="auto" columns="20,*, *">
-      <Switch row="0" col="1" checked="{{ isRememberMeActive }}" ></Switch>
-      <Label row="0" col="2" text="Remember Me"></Label>
+<GridLayout> <!-- outter grid layout -->
+  <StackLayout> <!-- main content -->
+
+     <!-- Page Content Here -->
+     <GridLayout class="wrapper" rows="auto, auto, auto, auto, auto, auto" columns="auto, auto">
+        <Image row="0" colSpan="2" class="logo"  [src]="getLogoImage()" stretch="none" horizontalAlignment="center"></Image>
+        
+        <TextField row="1" colSpan="2" hint="Email Address" keyboardType="email" [(ngModel)]="user.email" autocorrect="false" autocapitalizationType="none"></TextField>
+        <TextField row="2" colSpan="2" hint="Password" secure="true" [(ngModel)]="user.password" returnKeyType="done" (returnPress)="login()"></TextField>
+      
+        <Button row="3" colSpan="2" text="Sign In" class="submit-button" (tap)="login()"></Button>
+        <GridLayout row="4" colSpan="2"  rows="auto" columns="20,*, *">
+            <Switch row="0" col="1" checked="{{ isRememberMeActive }}" ></Switch>
+            <Label row="0" col="2" text="Remember Me"></Label>
+        </GridLayout>
+        <Button row="5" col="0" class="secondary-button" text="Forgot Password?" (tap)="initiateForgotPassword()"></Button>
+        <Button row="5" col="1" class="secondary-button" text="Sign Up" (tap)="navigateToSignup()"></Button>
+      
+      </GridLayout>
+
+  </StackLayout>
+  <StackLayout class="dimmer" visibility="{{isBusy ? 'visible' : 'collapsed'}}"></StackLayout>
+  <GridLayout rows="*" visibility="{{isBusy ? 'visible' : 'collapsed'}}">
+    <ActivityIndicator busy="true"></ActivityIndicator>
   </GridLayout>
-  <Button row="5" col="0" class="secondary-button" text="Forgot Password?" (tap)="initiateForgotPassword()"></Button>
-  <Button row="5" col="1" class="secondary-button" text="Sign Up" (tap)="navigateToSignup()"></Button>
-
 </GridLayout>
-<ActivityIndicator busy="{{ isBusy }}" width="100" height="100"></ActivityIndicator>
-</StackLayout>
