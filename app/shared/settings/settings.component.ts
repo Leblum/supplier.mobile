@@ -173,6 +173,11 @@ export class SettingsComponent implements OnInit {
                 return this.slugForm.valid;
             case SignupSteps.agreeToTerms:
                 return this.isTermsAgreedTo;
+            // We only turn on the next button if the user hasn't submitted any data yet.
+            // UI wise this doesn't really have time to change the 'enabled' on the button, 
+            // but this will keep the user from submitting more than once.
+            case SignupSteps.submitData:
+                return !this.hasSubmitted;
             default:
                 return true;
         }
@@ -222,12 +227,13 @@ export class SettingsComponent implements OnInit {
                 title: 'Validation Warning'
             });
             return;
-        }
-        if(this.currentSignUpStep === SignupSteps.submitData && !this.hasSubmitted){
-            this.registerSupplierAndUser();
-            this.hasSubmitted = true;
-        } else{
+        }else{
             this.currentSignUpStep = target;
+
+            if(this.currentSignUpStep === SignupSteps.submitData && !this.hasSubmitted){
+                this.registerSupplierAndUser();
+                this.hasSubmitted = true;
+            }
         }
     }
 
