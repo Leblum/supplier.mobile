@@ -8,7 +8,7 @@
             <ScrollView row="1" orientation="vertical">
 
                 <StackLayout>
-                    <GridLayout [formGroup]="nameForm" class="wrapper" *ngIf="currentSignUpStep == signupSteps.name || isSettingsForm" rows="auto,30, auto,auto, auto, auto, auto, auto, auto, auto">
+                    <GridLayout [formGroup]="nameForm" class="wrapper" *ngIf="currentSignUpStep == signupSteps.name || (isSettingsForm && currentFormStyle === settingsFormStyle.user)" rows="auto,30, auto,auto, auto, auto, auto, auto, auto, auto">
                         <Label row="0" class="stepTitle" text="Your Name"></Label>
 
                         <Label row="2" class="field-label" text="First Name"></Label>
@@ -21,7 +21,7 @@
                         <Label row="8" class="validation-message" [visibility]="nameForm.controls.lastName.invalid ? 'visible': 'hidden'" text="* Required"></Label>
                     </GridLayout>
 
-                    <GridLayout [formGroup]="emailForm" class="wrapper" rows="auto,30, auto, auto, auto" *ngIf="currentSignUpStep == signupSteps.email || isSettingsForm">
+                    <GridLayout [formGroup]="emailForm" class="wrapper" rows="auto,30, auto, auto, auto" *ngIf="currentSignUpStep == signupSteps.email || (isSettingsForm && currentFormStyle === settingsFormStyle.user)">
 
                         <Label row="0" col="0" class="stepTitle" text="Your Email"></Label>
 
@@ -34,7 +34,7 @@
                     </GridLayout>
 
 
-                    <GridLayout [formGroup]="passwordForm" *ngIf="currentSignUpStep == signupSteps.password || isSettingsForm" class="wrapper"
+                    <GridLayout [formGroup]="passwordForm" *ngIf="currentSignUpStep == signupSteps.password || (isSettingsForm && currentFormStyle === settingsFormStyle.password)" class="wrapper"
                         rows="auto,30, auto, auto, auto, auto, auto, auto, auto">
 
                         <Label row="0" col="0" class="stepTitle" text="Create a password"></Label>
@@ -51,7 +51,7 @@
                             text="* Password must match"></Label>
                     </GridLayout>
 
-                    <GridLayout [formGroup]="phoneForm" *ngIf="currentSignUpStep == signupSteps.phone || isSettingsForm" class="wrapper" rows="auto,30, auto, auto, auto">
+                    <GridLayout [formGroup]="phoneForm" *ngIf="currentSignUpStep == signupSteps.phone || (isSettingsForm && currentFormStyle === settingsFormStyle.user)" class="wrapper" rows="auto,30, auto, auto, auto">
 
                         <Label row="0" col="0" class="stepTitle" text="Your Phone"></Label>
 
@@ -61,7 +61,7 @@
                         <Label row="4" class="validation-message" [visibility]="phoneForm.invalid ? 'visible': 'hidden'" text="* Required and format should be 123-123-1234"></Label>
                     </GridLayout>
 
-                    <GridLayout [formGroup]="companyInfoForm" *ngIf="currentSignUpStep == signupSteps.companyInfo || isSettingsForm" class="wrapper"
+                    <GridLayout [formGroup]="companyInfoForm" *ngIf="currentSignUpStep == signupSteps.companyInfo || (isSettingsForm && currentFormStyle === settingsFormStyle.business)" class="wrapper"
                         rows="auto, 30, auto, auto, auto, auto, auto, auto, auto, auto, auto">
 
                         <Label row="0" class="stepTitle" text="Company Info"></Label>
@@ -88,7 +88,7 @@
 
                     </GridLayout>
 
-                    <GridLayout [formGroup]="pickupDetailsForm" *ngIf="currentSignUpStep == signupSteps.pickupDetails || isSettingsForm" class="wrapper"
+                    <GridLayout [formGroup]="pickupDetailsForm" *ngIf="currentSignUpStep == signupSteps.pickupDetails || (isSettingsForm && currentFormStyle === settingsFormStyle.business)" class="wrapper"
                         rows="auto, 30, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto, auto"
                         columns="80, *">
 
@@ -140,7 +140,7 @@
                             text="* Required and should be 123-123-1234"></Label>
                     </GridLayout>
 
-                    <GridLayout [formGroup]="slugForm" *ngIf="currentSignUpStep == signupSteps.teamUrl || isSettingsForm" class="wrapper" rows="auto,30, auto, auto, auto">
+                    <GridLayout [formGroup]="slugForm" *ngIf="currentSignUpStep == signupSteps.teamUrl || (isSettingsForm && currentFormStyle === settingsFormStyle.business)" class="wrapper" rows="auto,30, auto, auto, auto">
 
                         <Label row="0" class="stepTitle" text="Create a Team Url"></Label>
 
@@ -161,7 +161,10 @@
                         <Button row="4" colSpan="2" class="submit-button" text="Terms And conditions" (tap)="openTermsAndConditions()"></Button>
 
                     </GridLayout>
-                    <Button class="submit-button" *ngIf="isSettingsForm" text="Save" (tap)="save()"></Button>
+                    <StackLayout class="wrapper">
+                            <Button row="0" class="submit-button" *ngIf="isSettingsForm" text="Save" (tap)="save()"></Button>
+                            <Button row="1" class="submit-button" *ngIf="isSettingsForm" text="Cancel" (tap)="cancel()"></Button>
+                    </StackLayout>
                     <GridLayout rows="300,auto">
 
                     </GridLayout>
@@ -171,6 +174,6 @@
     </StackLayout>
     <StackLayout class="dimmer" visibility="{{isBusy ? 'visible' : 'collapsed'}}"></StackLayout>
     <GridLayout rows="*" visibility="{{isBusy ? 'visible' : 'collapsed'}}">
-        <ActivityIndicator busy="true"></ActivityIndicator>
+        <ActivityIndicator class="activity-indicator" busy="true"></ActivityIndicator>
     </GridLayout>
 </GridLayout>

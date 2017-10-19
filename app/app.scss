@@ -22,8 +22,16 @@
 .fa {
    font-family: "FontAwesome";
 }
+
 // Common page class
 .page-content {
+
+    margin-left: 30;
+    margin-right: 30;
+    background-color: $text-light;
+    padding-top:20;
+    padding-bottom:20;
+
     .page-placeholder {
         color: $page-icon-color;
         font-size: $page-content-placeholder-font-size;
@@ -40,6 +48,9 @@
     }
 }
 
+Switch{
+    background-color: $switch-color;
+}
 
 Button, TextField {
     margin-left: 16;
@@ -47,9 +58,15 @@ Button, TextField {
     margin-bottom: 20;
 }
 
+TextField{
+    border-bottom-color: $grey-dark;
+    border-bottom-width: 2;
+  }
 
 .activity-indicator {
     color: $grey-light;
+    width: 100;
+    height: 100;
   }
 
 //Action bar
@@ -85,6 +102,16 @@ ActivityIndicator{
     background-color: rgba(255, 0, 0, 0.0);
     border-color:rgba(255, 0, 0, 0.0);
     border-width: 1;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .wrapper{
+    margin-left: 30;
+    margin-right: 30;
+    margin-top:20;
+    margin-bottom:20;
+    background-color: $text-light;
   }
 
 // .background-image {

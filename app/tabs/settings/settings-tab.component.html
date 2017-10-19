@@ -2,4 +2,18 @@
 This is the component view that represents the 'Settings' tab.
 Feel free to customize layouts and components to change how the tab view looks.
 -->
-<SettingsComponent [isSettingsForm]="true" ></SettingsComponent>
+<StackLayout>
+    <StackLayout class="wrapper">
+            <Label text="Settings" class="tab-title" *ngIf="!isEdit"></Label>
+            <Button class="submit-button" (tap)="logout()" text="Logout" *ngIf="!isEdit" ></Button>
+            <Button class="submit-button" (tap)="changeBusinessInfo()" text="Edit Business Details" *ngIf="!isEdit" ></Button>
+            <Button class="submit-button" (tap)="changeUserInfo()" text="Edit User Details" *ngIf="!isEdit"></Button>
+            <Button class="submit-button" (tap)="changePassword()" text="Change Your Password" *ngIf="!isEdit"></Button>
+    </StackLayout>
+    <StackLayout>
+            <SettingsComponent [isSettingsForm]="true" [currentFormStyle]="currentFormStyle" *ngIf="isEdit" ></SettingsComponent>
+    </StackLayout>
+</StackLayout>
+
+    
+    

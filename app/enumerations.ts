@@ -17,6 +17,13 @@ export enum AddressType{
     billing = 3,
 }
 
+export enum SettingsFormStyle{
+    user = 1,
+    business = 2,
+    password = 3,
+    all = 4,
+}
+
 export const MimeType = {
     JSON: 'application/json',
     MULTIPART: 'multipart/form-data',

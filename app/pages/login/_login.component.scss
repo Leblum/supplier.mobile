@@ -1,21 +1,10 @@
 @import '../../_app-variables.scss';
 
-.wrapper{
-  margin-left: 30;
-  margin-right: 30;
-  background-color: $text-light;
-  padding-top:20;
-  padding-bottom:20;
-}
-
 Image {
   margin-bottom: 20;
 }
 
-TextField{
-  border-bottom-color: $grey-dark;
-  border-bottom-width: 2;
-}
+
 Label{
   margin-left: 20;
   margin-bottom: 10;

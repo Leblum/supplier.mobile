@@ -6,8 +6,6 @@
 // Custom common variables
 @import '../../app-variables';
 
-@import '../../_app-variables.scss';
-
 .navigation{
   margin-left: 10;
   margin-right: 10;
@@ -15,12 +13,6 @@
   padding-top:10;
   padding-bottom:20;
 }
-
-.wrapper{
-    background-color: $text-light;
-    padding-left: 20;
-    padding-right: 20;
-  }
 
 Image {
   margin-bottom: 20;
@@ -40,11 +32,6 @@ Button:disabled{
     opacity: .5;
 }
 
-TextField{
-  border-bottom-color: $grey-dark;
-  border-bottom-width: 2;
-}
-
 Label{
   margin-left: 20;
   margin-bottom: 10;
@@ -54,7 +41,6 @@ Switch{
   margin-bottom: 10;
   margin-left:-5;
   margin-top:-5;
-  background-color: $switch-color;
 }
 
 .field-label{
@@ -91,6 +77,5 @@ Switch{
 }
 
 .secondary-button{
-margin-top: 10;
-font-weight: bold;
+    margin-top: 10;
 }

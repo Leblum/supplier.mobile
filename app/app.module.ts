@@ -16,6 +16,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { SharedModule } from "../app/shared/shared.module";
 import { SignupModule } from "../app/pages/signup/signup.module";
 import { TabsModule } from "../app/tabs/tabs.module";
+import { SettingsEventBus } from "../app/event-buses/settings.event-bus";
 
 @NgModule({
     bootstrap: [
@@ -40,7 +41,8 @@ import { TabsModule } from "../app/tabs/tabs.module";
         SupplierService,
         AlertService,
         ErrorEventBus,
-        AuthGuard
+        AuthGuard,
+        SettingsEventBus
     ],
     schemas: [
         NO_ERRORS_SCHEMA

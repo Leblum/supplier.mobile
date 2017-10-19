@@ -3,7 +3,7 @@ import { isAndroid } from "platform";
 import { Page } from "ui/page";
 import { SelectedIndexChangedEventData, TabView, TabViewItem } from "tns-core-modules/ui/tab-view";
 import { IUser } from "../../../app/models/index";
-import { SignupSteps, AddressType, NotificationType } from "../../../app/enumerations";
+import { SignupSteps, AddressType, NotificationType, SettingsFormStyle } from "../../../app/enumerations";
 import { Router } from "@angular/router";
 import { UserService } from "../../../app/services/user.service";
 import { ISupplier } from "../../../app/models/supplier.interface";
@@ -16,6 +16,7 @@ import { AndroidApplication, AndroidActivityBackPressedEventData } from "applica
 import { IAuthenticationResponse } from "../../../app/models/authentication.interface";
 import { SupplierService, AlertService } from "../../../app/services";
 import { ErrorEventBus } from "../../../app/event-buses/error.event-bus";
+import { SettingsEventBus } from "../../../app/event-buses/settings.event-bus";
 
 @Component({
     selector: "SettingsComponent",
@@ -26,9 +27,11 @@ import { ErrorEventBus } from "../../../app/event-buses/error.event-bus";
 export class SettingsComponent implements OnInit {
 
     @Input() public isSettingsForm: boolean;
+    @Input() public currentFormStyle: SettingsFormStyle;
 
     public signupSteps = SignupSteps;
-    public currentSignUpStep: SignupSteps = SignupSteps.name;
+    public settingsFormStyle = SettingsFormStyle;
+    public currentSignUpStep: SignupSteps;
     public nameForm: FormGroup;
     public emailForm: FormGroup;
     public phoneForm: FormGroup;
@@ -37,6 +40,7 @@ export class SettingsComponent implements OnInit {
     public pickupDetailsForm: FormGroup;
     public slugForm: FormGroup;
     public termsForm: FormGroup;
+   
 
     public user: IUser = {};
     public supplier: ISupplier = {};
@@ -53,7 +57,8 @@ export class SettingsComponent implements OnInit {
         private page: Page,
         private suppliserService: SupplierService,
         private errorEventBus: ErrorEventBus,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private settingsEventBus: SettingsEventBus
     ) {
         //Need to create empty objects so there's no null ref.
         this.supplier.companyAddress = {};
@@ -97,6 +102,7 @@ export class SettingsComponent implements OnInit {
         this.prefillForm();
 
         console.log('in on constructor in settings component');
+        
     }
 
     public samePerson(args) {
@@ -126,6 +132,11 @@ export class SettingsComponent implements OnInit {
                 this.goBack();
                 this.cdr.detectChanges(); // tell angular to do change detection.  I think because this code is executed outside of angular's view
             });
+        }
+
+        console.log(`Current Settings Form Style ${this.currentFormStyle}`);
+        if(!this.isSettingsForm){
+            this.currentSignUpStep = SignupSteps.name;
         }
     }
 
@@ -238,7 +249,23 @@ export class SettingsComponent implements OnInit {
     }
 
     save(){
-        
+        switch(+this.currentFormStyle){
+            case SettingsFormStyle.password:
+                if(this.passwordForm.valid){
+                    this.userService.changePassword(this.user.password).subscribe( response =>{
+                        //busy off
+                        // alert user.
+                    })
+                }
+                else{
+
+                }
+                break;
+        }
+    }
+
+    cancel(){
+        this.settingsEventBus.cancel();
     }
 
     registerSupplierAndUser() {

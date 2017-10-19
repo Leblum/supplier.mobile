@@ -19,9 +19,4 @@ export class HomeComponent implements OnInit {
         * Use the "ngOnInit" handler to initialize data for the view.
         *************************************************************/
     }
-
-    logout(){
-        this.userService.logout();
-        this.router.navigate(['/login']);
-    }
 }

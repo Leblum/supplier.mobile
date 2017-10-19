@@ -38,13 +38,22 @@ export class UserService extends BaseService<IUser> {
                 throw (`There was a problem authenticating the user err:${response.text()}`);
             }
             const authResponse: IAuthenticationResponse = response.json();
-            applicationSettings.setString(CONST.CLIENT_TOKEN_LOCATION, response.json().token);
+            applicationSettings.setString(CONST.CLIENT_TOKEN_LOCATION, authResponse.token);
+            //TODO figure out how to decode the token to get the user id.
+            applicationSettings.setString(CONST.CURRENT_USER_ID, authResponse);
             return authResponse;
         });
     }
 
     public logout(){
         applicationSettings.remove(CONST.CLIENT_TOKEN_LOCATION);
+    }
+
+    public changePassword(newPassword: string){
+        let user: IUser = {
+            password:newPassword,
+        }
+        return super.update(user,applicationSettings.getString(CONST.CURRENT_USER_ID));
     }
 
     public submitForgotPasswordRequest(user: IUser): Observable<Response>{
