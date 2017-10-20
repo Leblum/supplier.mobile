@@ -15,6 +15,7 @@ export const CONST = {
         PRODUCTS: '/products',
     },
     CLIENT_TOKEN_LOCATION: 'token',
+    CLIENT_DECODED_TOKEN_LOCATION: 'decoded-token',
     CURRENT_USER_ID: 'current_user_id',
     MOMENT_DATE_FORMAT: 'YYYY-MM-DD h:mm:ss a Z',
     // These error codes are returned from the server to make it easier to programattically handle certain errrors.

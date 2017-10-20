@@ -27,26 +27,28 @@ export class UserService extends BaseService<IUser> {
             this.serviceConfig.rootApiUrl + CONST.ep.REGISTER ,user).catch(this.handleErrors);
     }
 
-    private login(user: IUser): Observable<Response> {
+    private authenticate(user: IUser): Observable<Response> {
         return this.http.post(
             this.serviceConfig.rootApiUrl + CONST.ep.AUTHENTICATE,user).catch(this.handleErrors);
     }
 
-    public authenticate(user:IUser): Observable<IAuthenticationResponse>{
-       return this.login(user).map((response)=>{
+    public login(user:IUser): Observable<IAuthenticationResponse>{
+       return this.authenticate(user).map((response)=>{
             if(response.status != 200){
                 throw (`There was a problem authenticating the user err:${response.text()}`);
             }
             const authResponse: IAuthenticationResponse = response.json();
             applicationSettings.setString(CONST.CLIENT_TOKEN_LOCATION, authResponse.token);
-            //TODO figure out how to decode the token to get the user id.
-            applicationSettings.setString(CONST.CURRENT_USER_ID, authResponse);
+            applicationSettings.setString(CONST.CLIENT_DECODED_TOKEN_LOCATION, JSON.stringify(authResponse.decoded));
+            applicationSettings.setString(CONST.CURRENT_USER_ID, authResponse.decoded.userId);
             return authResponse;
         });
     }
 
     public logout(){
         applicationSettings.remove(CONST.CLIENT_TOKEN_LOCATION);
+        applicationSettings.remove(CONST.CLIENT_DECODED_TOKEN_LOCATION);
+        applicationSettings.remove(CONST.CURRENT_USER_ID);
     }
 
     public changePassword(newPassword: string){

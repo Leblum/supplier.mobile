@@ -42,7 +42,7 @@ export class SupplierService extends BaseService<ISupplier> {
             })
             // Then we login the newly registered user, so we can use his token when we create suppliers
             .flatMap(registeredUser => {
-                return userService.authenticate(user);
+                return userService.login(user);
             })
             // Double check that our login response wasn't something crazy.
             .map(authResponse => {
@@ -68,7 +68,7 @@ export class SupplierService extends BaseService<ISupplier> {
             // Because of supplier registration moving a user around, we're going to reAuth the user to get updated organizationID, and 
             // updated user roles.  This will also double check that nothing went wrong.
             .flatMap(() => {
-                return userService.authenticate(user);
+                return userService.login(user);
             })
             .map(finalAuthResponse => {
                 console.log(`Created user token: ${finalAuthResponse.token}`);

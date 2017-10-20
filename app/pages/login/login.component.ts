@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
             });
             return;
         }
-        this.userService.authenticate(this.user)
+        this.userService.login(this.user)
             .subscribe(authResponse => {
                 this.router.navigate(["/home"]);
                 this.isBusy = false;
