@@ -55,8 +55,19 @@ export class BaseService<T extends IBaseModel> {
         return this;
     }
 
+    // Because we only create a singleton on these classes, the auth token can get stale, so we pull a fresh copy out on every base call.
+    refreshAuthToken(){
+        this.requestOptions = new RequestOptions({
+            headers: new Headers({ 
+                'Content-Type': MimeType.JSON,
+                'x-access-token': applicationSettings.getString(CONST.CLIENT_TOKEN_LOCATION)
+         }),
+        });
+    }
+
     get<T extends IBaseModel>(id: string): Observable<T> {
-        const url = this.buildUrl({ id });
+        this.refreshAuthToken();
+        const url = this.buildUrl({ id: id , useRestricted: this.serviceConfig.useRestrictedEndpoint });
         return this.http
             .get(url, this.requestOptions)
             .map((res: Response) => {
@@ -66,7 +77,8 @@ export class BaseService<T extends IBaseModel> {
     }
 
     getList<T extends IBaseModel>(query?: Object): Observable<T[]> {
-        const url = this.buildUrl({ query });
+        this.refreshAuthToken();
+        const url = this.buildUrl({ query , useRestricted: this.serviceConfig.useRestrictedEndpoint });
         return this.http
             .get(url, this.requestOptions)
             .map((res: Response) => {
@@ -75,8 +87,21 @@ export class BaseService<T extends IBaseModel> {
             .catch(this.handleError);
     }
 
+    search<T extends IBaseModel>(query?: Object): Observable<T[]> {
+        this.refreshAuthToken();
+        const url = this.buildUrl();
+        return this.http
+            .post(this.serviceConfig.rootApiUrl + this.serviceConfig.urlSuffix + CONST.ep.QUERY, query,this.requestOptions)
+            .map((res: Response) => {
+                return res.json();
+            })
+            .catch(this.handleError);
+    }
+
+
     delete<T extends IBaseModel>(id: string, query?: Object): Observable<void> {
-        const url = this.buildUrl({ id, query });
+        this.refreshAuthToken();
+        const url = this.buildUrl({ id, query , useRestricted: this.serviceConfig.useRestrictedEndpoint });
         return this.http
             .delete(url, this.requestOptions)
             .map((res: Response) => {
@@ -86,7 +111,8 @@ export class BaseService<T extends IBaseModel> {
     }
 
     create<T extends IBaseModel>(T: T, query?: Object): Observable<T> {
-        const url = this.buildUrl({ query });
+        this.refreshAuthToken();
+        const url = this.buildUrl({ query , useRestricted: this.serviceConfig.useRestrictedEndpoint });
         return this.http
             .post(url, T, this.requestOptions)
             .map((res: Response) => {
@@ -96,7 +122,8 @@ export class BaseService<T extends IBaseModel> {
     }
 
     update<T extends IBaseModel>(T: T, id: string, query?: Object): Observable<T> {
-        const url = this.buildUrl({ id: id, query: query });
+        this.refreshAuthToken();
+        const url = this.buildUrl({ id: id, query: query , useRestricted: this.serviceConfig.useRestrictedEndpoint });
         console.log(url);
         return this.http
             .patch(url, T, this.requestOptions)
@@ -110,7 +137,8 @@ export class BaseService<T extends IBaseModel> {
     // item.checkout is a good example of this kind of operation.
     // We will clear chache when this method gets executed
     executeSingleOperation<T extends IBaseModel>(id: string, operation?: string, query?: Object): Observable<T> {
-        const url: string = this.buildUrl({ id, operation, query });
+        this.refreshAuthToken();
+        const url: string = this.buildUrl({ id, operation, query , useRestricted: this.serviceConfig.useRestrictedEndpoint });
         return this.http
             .get(url, this.requestOptions)
             .map((res: Response) => {
@@ -122,7 +150,8 @@ export class BaseService<T extends IBaseModel> {
     // This is used for listing operations that return a list of objects.
     // item.versions is a good example, where you're going to return a list of items.
     executeListOperation<T extends IBaseModel>(id: string, operation: string, query?: Object): Observable<T[]> {
-        const url = this.buildUrl({ id, operation, query });
+        this.refreshAuthToken();
+        const url = this.buildUrl({ id, operation, query , useRestricted: this.serviceConfig.useRestrictedEndpoint });
         return this.http.get(url, this.requestOptions).map((res: Response) => {
             return res.json();
         }).catch(this.handleError);

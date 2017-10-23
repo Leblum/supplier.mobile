@@ -29,8 +29,8 @@ export class LoginComponent implements OnInit {
     constructor(private router: Router, private userService: UserService, private page: Page, private alertService: AlertService, private errorEventBus: ErrorEventBus) {
         // For testing
         this.user = {
-            email: 'tester@leblum.com',
-            password: 'password'
+            email: 'bd3@leblum.com',
+            password: 'test1234'
         };
     }
 

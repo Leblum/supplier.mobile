@@ -26,7 +26,7 @@ export class SupplierService extends BaseService<ISupplier> {
     }
 
     public getSupplierFromOrganization(organizationID: string): Observable<ISupplier>{
-        return super.getList({
+        return super.search({
             "ownerships.ownerId": organizationID,
             "ownerships.ownershipType": enums.OwnershipType.organization
         }).map(suppliers =>{
@@ -38,12 +38,18 @@ export class SupplierService extends BaseService<ISupplier> {
 
     public register(supplier: ISupplier, token: string): Observable<Response> {
         return this.http.post(
-            this.serviceConfig.rootApiUrl + CONST.ep.SUPPLIERS + CONST.ep.REGISTER, supplier, this.requestOptions)
+            this.serviceConfig.rootApiUrl + CONST.ep.SUPPLIERS + CONST.ep.REGISTER, supplier, {
+                headers: new Headers({ 
+                    'Content-Type': MimeType.JSON,
+                    'x-access-token': token
+             }),
+            })
             .catch(this.handleError);
     }
 
     public createNewSupplierTeam(supplier: ISupplier, user: IUser): Observable<IAuthenticationResponse> {
         try {
+            // try this again.
             const userService = new UserService(this.http);
             // First we register the new user.
             return userService.register(user).map(response => {

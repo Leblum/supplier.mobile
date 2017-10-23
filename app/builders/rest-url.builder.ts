@@ -86,9 +86,9 @@ export class RestUrlBuilder {
     build() {
         const urlParts: Array<string> = [];
         urlParts.push(this.rootApiUrl);
-        if (this.rootApiUrl.lastIndexOf('/') !== this.rootApiUrl.length - 1) {
-             urlParts.push('/');
-        }
+        // if (this.rootApiUrl.lastIndexOf('/') !== this.rootApiUrl.length - 1) {
+        //      urlParts.push('/');
+        // }
 
         if (this.usePlural) {
             urlParts.push(this.urlSuffixPlural);

@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef, ViewChild, OnChanges, SimpleChanges, Cha
 import { isAndroid } from "platform";
 import { Page } from "ui/page";
 import { SelectedIndexChangedEventData, TabView, TabViewItem } from "tns-core-modules/ui/tab-view";
-import { IUser , ISupplier, IAuthenticationResponse, ITokenPayload, IOrganization} from "../../../app/models/index";
+import { IUser, ISupplier, IAuthenticationResponse, ITokenPayload, IOrganization } from "../../../app/models/index";
 import { SignupSteps, AddressType, NotificationType, SettingsFormStyle } from "../../../app/enumerations";
 import { Router } from "@angular/router";
 import { Switch } from "tns-core-modules/ui/switch/switch";
@@ -11,8 +11,8 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from "@angular/fo
 import * as utilityModule from 'utils/utils';
 import * as application from "application";
 import { AndroidApplication, AndroidActivityBackPressedEventData } from "application";
-import {  } from "../../../app/models/authentication.interface";
-import { SupplierService, AlertService,  OrganizationService, UserService} from "../../../app/services";
+import { } from "../../../app/models/authentication.interface";
+import { SupplierService, AlertService, OrganizationService, UserService } from "../../../app/services";
 import { ErrorEventBus } from "../../../app/event-buses/error.event-bus";
 import { SettingsEventBus } from "../../../app/event-buses/settings.event-bus";
 import * as applicationSettings from "application-settings";
@@ -40,7 +40,7 @@ export class SettingsComponent implements OnInit {
     public pickupDetailsForm: FormGroup;
     public slugForm: FormGroup;
     public termsForm: FormGroup;
-   
+
 
     public user: IUser = {};
     public supplier: ISupplier = {};
@@ -101,17 +101,17 @@ export class SettingsComponent implements OnInit {
         });
 
         // TESTING ONLY
-        this.prefillForm();
+        //this.prefillForm();
 
-        if(this.isSettingsForm){
+        if (this.isSettingsForm) {
             // Here because it's a settings form, we're going to load data from the API.
-            let tokenPayload:ITokenPayload = JSON.parse(applicationSettings.getString(CONST.CLIENT_DECODED_TOKEN_LOCATION));
+            let tokenPayload: ITokenPayload = JSON.parse(applicationSettings.getString(CONST.CLIENT_DECODED_TOKEN_LOCATION));
 
-            this.userService.get(tokenPayload.userId).subscribe(user =>{
+            this.userService.get(tokenPayload.userId).subscribe(user => {
                 this.user = user;
             });
 
-            this.organizationService.get(tokenPayload.organizationId).subscribe(org =>{
+            this.organizationService.get(tokenPayload.organizationId).subscribe(org => {
                 this.organization = org;
             });
 
@@ -121,7 +121,7 @@ export class SettingsComponent implements OnInit {
         }
 
         console.log('in on constructor in settings component');
-        
+
     }
 
     public samePerson(args) {
@@ -145,7 +145,7 @@ export class SettingsComponent implements OnInit {
         this.page.actionBarHidden = true;
         // If we're on android we need the back button to handle our "fake pages", so we're going to 
         // listen for the activity, and then "go back" whenever the hardware button is pressed.
-        if(application.android){
+        if (application.android) {
             application.android.on(AndroidApplication.activityBackPressedEvent, (data: AndroidActivityBackPressedEventData) => {
                 data.cancel = true; // prevents default back button behavior, which kinda minimizes/closes the application. 
                 this.goBack();
@@ -154,19 +154,19 @@ export class SettingsComponent implements OnInit {
         }
 
         console.log(`Current Settings Form Style ${this.currentFormStyle}`);
-        if(!this.isSettingsForm){
+        if (!this.isSettingsForm) {
             this.currentSignUpStep = SignupSteps.name;
         }
 
-        if(this.isSettingsForm){
+        if (this.isSettingsForm) {
             // Here because it's a settings form, we're going to load data from the API.
-            let tokenPayload:ITokenPayload = JSON.parse(applicationSettings.getString(CONST.CLIENT_DECODED_TOKEN_LOCATION));
+            let tokenPayload: ITokenPayload = JSON.parse(applicationSettings.getString(CONST.CLIENT_DECODED_TOKEN_LOCATION));
 
-            this.userService.get(tokenPayload.userId).subscribe(user =>{
+            this.userService.get(tokenPayload.userId).subscribe(user => {
                 this.user = user;
             });
 
-            this.organizationService.get(tokenPayload.organizationId).subscribe(org =>{
+            this.organizationService.get(tokenPayload.organizationId).subscribe(org => {
                 this.organization = org;
             });
 
@@ -267,40 +267,89 @@ export class SettingsComponent implements OnInit {
     }
 
     goNext(target: SignupSteps) {
-        if(!this.isStepValid(this.currentSignUpStep)){
+        if (!this.isStepValid(this.currentSignUpStep)) {
             this.alertService.send({
                 notificationType: NotificationType.validationError,
                 text: 'Please correct the errors on the form.',
                 title: 'Validation Warning'
             });
             return;
-        }else{
+        } else {
             this.currentSignUpStep = target;
 
-            if(this.currentSignUpStep === SignupSteps.submitData && !this.hasSubmitted){
+            if (this.currentSignUpStep === SignupSteps.submitData && !this.hasSubmitted) {
                 this.registerSupplierAndUser();
                 this.hasSubmitted = true;
             }
         }
     }
 
-    save(){
-        switch(+this.currentFormStyle){
+    save() {
+        this.isBusy = true;
+        switch (+this.currentFormStyle) {
             case SettingsFormStyle.password:
-                if(this.passwordForm.valid){
-                    this.userService.changePassword(this.user.password).subscribe( response =>{
-                        //busy off
-                        // alert user.
-                    })
+                if (this.passwordForm.valid) {
+                    try {
+                        this.userService.changePassword(this.user.password).subscribe(user => {
+                            if (!user) {
+                                throw ('There was an error saving your password');
+                            }
+                            this.isBusy = false;
+                            // We can close the dialog by calling cancel.... I'm not sure that's exactly what I want to do though.
+                            this.cancel();
+                        });
+                    } catch (err) {
+                        this.isBusy = false;
+                        this.errorEventBus.throw(err);
+                    }
                 }
-                else{
+                break;
+            case SettingsFormStyle.business:
+                if (this.companyInfoForm.valid && this.pickupDetailsForm.valid && this.slugForm.valid) {
+                    try {
+                        console.log('About to update the supplier');
+                        this.suppliserService.update(this.supplier, this.supplier._id).map(supplier => {
+                            console.log('Supllier Updated moving on to the org.');
 
+                            this.supplier = supplier;
+                            this.organization.name = this.supplier.name;
+
+                            return supplier;
+
+                        }).flatMap(supplier =>{
+                            console.log('About to start org.');
+                            return this.organizationService.changeName(this.organization);
+                        }).map(org =>{
+                                console.log('Org Updated now were turning off the busy');
+                                this.organization = org;
+                                this.isBusy = false;
+                        })
+                        // Because observables are lazy until there is a subscription, we have to have a subscription at the end of this to actually execute it.
+                        .subscribe(()=>{
+                            console.log('Chain Executed');
+                        })
+                    } catch (err) {
+                        this.isBusy = false;
+                        this.errorEventBus.throw(err);
+                    }
+                }
+                break;
+            case SettingsFormStyle.user:
+                if (this.emailForm.valid && this.nameForm.valid && this.phoneForm.valid) {
+                    try {
+                        this.userService.update(this.user, this.user._id).subscribe(user => {
+                            this.user = user;
+                        });
+                    } catch (err) {
+                        this.isBusy = false;
+                        this.errorEventBus.throw(err);
+                    }
                 }
                 break;
         }
     }
 
-    cancel(){
+    cancel() {
         this.settingsEventBus.cancel();
     }
 
@@ -309,7 +358,7 @@ export class SettingsComponent implements OnInit {
         // First we're going to create a user.
         try {
             this.isBusy = true;
-            this.suppliserService.createNewSupplierTeam(this.supplier,this.user).subscribe(authResponse=>{
+            this.suppliserService.createNewSupplierTeam(this.supplier, this.user).subscribe(authResponse => {
                 this.isBusy = false;
                 // this.alertService.send({
                 //     notificationType: NotificationType.success,

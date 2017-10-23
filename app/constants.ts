@@ -20,6 +20,7 @@ export const CONST = {
         PASSWORD_RESET_REQUEST: '/password-reset-request',
         PRODUCTS: '/products',
         SUPPLIERS: '/suppliers',
+        QUERY: '/query',
         client: {
             VERIFY_EMAIL: '/verify-email',
             RESET_PASSWORD: '/reset-password'

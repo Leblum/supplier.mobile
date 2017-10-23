@@ -24,58 +24,12 @@ export class OrganizationService extends BaseService<IOrganization> {
         });
     }
 
-    private changeName(organization: IOrganization): Observable<IOrganization> {
+    public changeName(organization: IOrganization): Observable<IOrganization> {
         return super.update(organization, organization._id,null);
-    }
-
-    public register(user: IUser): Observable<Response> {
-        return this.http.post(
-            this.serviceConfig.rootApiUrl + CONST.ep.REGISTER ,user).catch(this.handleErrors);
-    }
-
-    private authenticate(user: IUser): Observable<Response> {
-        return this.http.post(
-            this.serviceConfig.rootApiUrl + CONST.ep.AUTHENTICATE,user).catch(this.handleErrors);
-    }
-
-    public login(user:IUser): Observable<IAuthenticationResponse>{
-       return this.authenticate(user).map((response)=>{
-            if(response.status != 200){
-                throw (`There was a problem authenticating the user err:${response.text()}`);
-            }
-            const authResponse: IAuthenticationResponse = response.json();
-            applicationSettings.setString(CONST.CLIENT_TOKEN_LOCATION, authResponse.token);
-            applicationSettings.setString(CONST.CLIENT_DECODED_TOKEN_LOCATION, JSON.stringify(authResponse.decoded));
-            applicationSettings.setString(CONST.CURRENT_USER_ID, authResponse.decoded.userId);
-            return authResponse;
-        });
-    }
-
-    public logout(){
-        applicationSettings.remove(CONST.CLIENT_TOKEN_LOCATION);
-        applicationSettings.remove(CONST.CLIENT_DECODED_TOKEN_LOCATION);
-        applicationSettings.remove(CONST.CURRENT_USER_ID);
-    }
-
-    public changePassword(newPassword: string){
-        let user: IUser = {
-            password:newPassword,
-        }
-        return super.update(user,applicationSettings.getString(CONST.CURRENT_USER_ID));
-    }
-
-    public submitForgotPasswordRequest(user: IUser): Observable<Response>{
-        return this.http.post(
-            this.serviceConfig.rootApiUrl + CONST.ep.PASSWORD_RESET_REQUEST, user).catch(this.handleErrors);
     }
 
     handleErrors(error: Response) {
         console.error(JSON.stringify(error.json()));
         return Observable.throw(error);
-    }
-
-    public validateEmail(user: IUser): boolean {
-            var re = /^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-            return re.test(user.email);
     }
 }

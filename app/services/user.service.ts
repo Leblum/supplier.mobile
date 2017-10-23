@@ -34,6 +34,8 @@ export class UserService extends BaseService<IUser> {
     }
 
     public login(user:IUser): Observable<IAuthenticationResponse>{
+        // Make sure we clear the other login details out first.
+        this.logout();
        return this.authenticate(user).map((response)=>{
             if(response.status != 200){
                 throw (`There was a problem authenticating the user err:${response.text()}`);
@@ -55,8 +57,12 @@ export class UserService extends BaseService<IUser> {
     public changePassword(newPassword: string){
         let user: IUser = {
             password:newPassword,
+            _id: applicationSettings.getString(CONST.CURRENT_USER_ID)
         }
-        return super.update(user,applicationSettings.getString(CONST.CURRENT_USER_ID));
+        return this.http.put(
+            `${this.serviceConfig.rootApiUrl}${CONST.ep.USERS}${CONST.ep.RESTRICTED}${CONST.ep.UPDATE_PASSWORD}/${user._id}`, 
+            user, this.requestOptions)
+            .catch(this.handleErrors);
     }
 
     public submitForgotPasswordRequest(user: IUser): Observable<Response>{
