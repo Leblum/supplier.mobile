@@ -327,6 +327,7 @@ export class SettingsComponent implements OnInit {
                         // Because observables are lazy until there is a subscription, we have to have a subscription at the end of this to actually execute it.
                         .subscribe(()=>{
                             console.log('Chain Executed');
+                            this.cancel();
                         })
                     } catch (err) {
                         this.isBusy = false;
@@ -339,6 +340,8 @@ export class SettingsComponent implements OnInit {
                     try {
                         this.userService.update(this.user, this.user._id).subscribe(user => {
                             this.user = user;
+                            this.isBusy = false;
+                            this.cancel();
                         });
                     } catch (err) {
                         this.isBusy = false;
