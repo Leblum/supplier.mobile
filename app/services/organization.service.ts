@@ -10,17 +10,22 @@ import * as applicationSettings from "application-settings";
 import { CONST } from "../../app/constants";
 import { IAuthenticationResponse } from "../../app/models/authentication.interface";
 import { BaseService } from "../../app/services/base/base.service";
+import { IOrganization } from "../../app/models/organization.interface";
 
 
 @Injectable()
-export class UserService extends BaseService<IUser> {
+export class OrganizationService extends BaseService<IOrganization> {
 
     constructor(public http: Http) {
         super(http, {
             rootApiUrl: `${environment.IdentityAPIBase}${environment.V1}`,
-            urlSuffix: CONST.ep.USERS,
-            useRestrictedEndpoint: true
+            urlSuffix: CONST.ep.ORGANIZATIONS,
+            useRestrictedEndpoint: true,
         });
+    }
+
+    private changeName(organization: IOrganization): Observable<IOrganization> {
+        return super.update(organization, organization._id,null);
     }
 
     public register(user: IUser): Observable<Response> {

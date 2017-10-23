@@ -8,7 +8,7 @@ import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { LoginComponent } from "../app/pages/login/login.component";
 import { ForgotPasswordComponent } from "../app/pages/forgot-password/forgot-password.component";
-import { SupplierService, UserService, AlertService } from "../app/services";
+import { SupplierService, UserService, AlertService, OrganizationService } from "../app/services";
 import { AlertComponent } from "../app/directives/alert.component";
 import { ErrorEventBus } from "../app/event-buses/error.event-bus";
 import { AuthGuard } from "../app/guards/auth.gaurd";
@@ -42,7 +42,8 @@ import { SettingsEventBus } from "../app/event-buses/settings.event-bus";
         AlertService,
         ErrorEventBus,
         AuthGuard,
-        SettingsEventBus
+        SettingsEventBus,
+        OrganizationService
     ],
     schemas: [
         NO_ERRORS_SCHEMA

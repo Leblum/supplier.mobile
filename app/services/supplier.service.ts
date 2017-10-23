@@ -12,6 +12,7 @@ import { IAuthenticationResponse } from "../../app/models/authentication.interfa
 import { BaseService } from "../../app/services/base/base.service";
 import * as applicationSettings from "application-settings";
 import { CONST } from "../../app/constants";
+import  * as enums from "../../app/enumerations";
 
 @Injectable()
 export class SupplierService extends BaseService<ISupplier> {
@@ -19,7 +20,19 @@ export class SupplierService extends BaseService<ISupplier> {
     constructor(public http: Http) {
         super(http, {
             rootApiUrl: `${environment.ProductAPIBase}${environment.V1}`,
-            urlSuffix: 'suppliers'
+            urlSuffix: CONST.ep.SUPPLIERS,
+            useRestrictedEndpoint: false
+        });
+    }
+
+    public getSupplierFromOrganization(organizationID: string): Observable<ISupplier>{
+        return super.getList({
+            "ownerships.ownerId": organizationID,
+            "ownerships.ownershipType": enums.OwnershipType.organization
+        }).map(suppliers =>{
+            if(suppliers && suppliers.length > 0){
+                return suppliers[0];
+            }
         });
     }
 

@@ -24,6 +24,18 @@ export enum SettingsFormStyle{
     all = 4,
 }
 
+export enum OrganizationType{
+    system = 1,
+    guest = 2,
+    supplier = 3
+}
+
+export enum OwnershipType{
+    supplier=1,
+    organization=2,
+    user=3
+}
+
 export const MimeType = {
     JSON: 'application/json',
     MULTIPART: 'multipart/form-data',

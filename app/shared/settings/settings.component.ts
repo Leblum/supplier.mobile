@@ -2,21 +2,21 @@ import { Component, OnInit, ElementRef, ViewChild, OnChanges, SimpleChanges, Cha
 import { isAndroid } from "platform";
 import { Page } from "ui/page";
 import { SelectedIndexChangedEventData, TabView, TabViewItem } from "tns-core-modules/ui/tab-view";
-import { IUser } from "../../../app/models/index";
+import { IUser , ISupplier, IAuthenticationResponse, ITokenPayload, IOrganization} from "../../../app/models/index";
 import { SignupSteps, AddressType, NotificationType, SettingsFormStyle } from "../../../app/enumerations";
 import { Router } from "@angular/router";
-import { UserService } from "../../../app/services/user.service";
-import { ISupplier } from "../../../app/models/supplier.interface";
 import { Switch } from "tns-core-modules/ui/switch/switch";
 import { TextField } from 'ui/text-field'
 import { FormBuilder, FormGroup, Validators, AbstractControl } from "@angular/forms";
 import * as utilityModule from 'utils/utils';
 import * as application from "application";
 import { AndroidApplication, AndroidActivityBackPressedEventData } from "application";
-import { IAuthenticationResponse } from "../../../app/models/authentication.interface";
-import { SupplierService, AlertService } from "../../../app/services";
+import {  } from "../../../app/models/authentication.interface";
+import { SupplierService, AlertService,  OrganizationService, UserService} from "../../../app/services";
 import { ErrorEventBus } from "../../../app/event-buses/error.event-bus";
 import { SettingsEventBus } from "../../../app/event-buses/settings.event-bus";
+import * as applicationSettings from "application-settings";
+import { CONST } from "../../../app/constants";
 
 @Component({
     selector: "SettingsComponent",
@@ -44,6 +44,7 @@ export class SettingsComponent implements OnInit {
 
     public user: IUser = {};
     public supplier: ISupplier = {};
+    public organization: IOrganization = {};
     public isPickupSame: boolean = false;
     public isTermsAgreedTo: boolean = false;
     public isBusy: boolean = false;
@@ -58,7 +59,8 @@ export class SettingsComponent implements OnInit {
         private suppliserService: SupplierService,
         private errorEventBus: ErrorEventBus,
         private alertService: AlertService,
-        private settingsEventBus: SettingsEventBus
+        private settingsEventBus: SettingsEventBus,
+        private organizationService: OrganizationService
     ) {
         //Need to create empty objects so there's no null ref.
         this.supplier.companyAddress = {};
@@ -101,6 +103,23 @@ export class SettingsComponent implements OnInit {
         // TESTING ONLY
         this.prefillForm();
 
+        if(this.isSettingsForm){
+            // Here because it's a settings form, we're going to load data from the API.
+            let tokenPayload:ITokenPayload = JSON.parse(applicationSettings.getString(CONST.CLIENT_DECODED_TOKEN_LOCATION));
+
+            this.userService.get(tokenPayload.userId).subscribe(user =>{
+                this.user = user;
+            });
+
+            this.organizationService.get(tokenPayload.organizationId).subscribe(org =>{
+                this.organization = org;
+            });
+
+            this.suppliserService.getSupplierFromOrganization(tokenPayload.organizationId).subscribe(supplier => {
+                this.supplier = supplier;
+            });
+        }
+
         console.log('in on constructor in settings component');
         
     }
@@ -137,6 +156,23 @@ export class SettingsComponent implements OnInit {
         console.log(`Current Settings Form Style ${this.currentFormStyle}`);
         if(!this.isSettingsForm){
             this.currentSignUpStep = SignupSteps.name;
+        }
+
+        if(this.isSettingsForm){
+            // Here because it's a settings form, we're going to load data from the API.
+            let tokenPayload:ITokenPayload = JSON.parse(applicationSettings.getString(CONST.CLIENT_DECODED_TOKEN_LOCATION));
+
+            this.userService.get(tokenPayload.userId).subscribe(user =>{
+                this.user = user;
+            });
+
+            this.organizationService.get(tokenPayload.organizationId).subscribe(org =>{
+                this.organization = org;
+            });
+
+            this.suppliserService.getSupplierFromOrganization(tokenPayload.organizationId).subscribe(supplier => {
+                this.supplier = supplier;
+            });
         }
     }
 

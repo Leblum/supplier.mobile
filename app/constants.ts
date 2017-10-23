@@ -1,18 +1,29 @@
 export const CONST = {
     ep: {
+        API: '/api',
+        V1: '/v1',
         AUTHENTICATE: '/authenticate',
+        API_DOCS: '/api-docs',
+        API_SWAGGER_DEF: '/swagger-definition',
         PERMISSIONS: '/permissions',
         ROLES: '/roles',
         USERS: '/users',
+        RESTRICTED: '/restricted',
+        UPGRADE: '/upgrade',
+        UPDATE_PASSWORD: '/update-password',
         ORGANIZATIONS: '/organizations',
         REGISTER: '/register',
-        SUPPLIERS: '/suppliers',
         EMAIL_VERIFICATIONS: '/email-verifications',
         PASSWORD_RESET: '/password-reset',
         PASSWORD_RESET_TOKENS: '/password-reset-tokens',
         VALIDATE_EMAIL: '/validate-email',
         PASSWORD_RESET_REQUEST: '/password-reset-request',
         PRODUCTS: '/products',
+        SUPPLIERS: '/suppliers',
+        client: {
+            VERIFY_EMAIL: '/verify-email',
+            RESET_PASSWORD: '/reset-password'
+        }
     },
     CLIENT_TOKEN_LOCATION: 'token',
     CLIENT_DECODED_TOKEN_LOCATION: 'decoded-token',

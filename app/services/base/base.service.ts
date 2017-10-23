@@ -8,7 +8,7 @@ import 'rxjs/add/operator/catch'
 import { ServiceError } from '../../classes/app-error.class'
 import { IBaseModel } from '../../models';
 import { environment } from "../../environments/environment";
-import { ServiceConfigType, ServiceConfig } from './service.config';
+import { IServiceConfig } from './service.config';
 import { RestUrlConfigType, RestUrlBuilder } from '../../builders/rest-url.builder';
 import { CONST } from '../../constants';
 import * as applicationSettings from "application-settings";
@@ -16,12 +16,13 @@ import * as applicationSettings from "application-settings";
 
 export class BaseService<T extends IBaseModel> {
 
+    //region instance variables
     protected restUrlBuilder: RestUrlBuilder = new RestUrlBuilder();
     protected requestOptions: RequestOptions;
-    protected serviceConfig: ServiceConfigType;
+    protected serviceConfig: IServiceConfig;
     protected identityApiBaseV1: string = `${environment.IdentityAPIBase}${environment.V1}`;
     protected productApiBaseV1: string = `${environment.ProductAPIBase}${environment.V1}`;
-
+    //endregion
 
     // tslint:disable-next-line:member-ordering
     public static convertToClass<T>(obj: Object, classToInstantiate): T {
@@ -35,9 +36,9 @@ export class BaseService<T extends IBaseModel> {
 
     constructor(
         protected http: Http,
-        serviceConfigType: ServiceConfigType
+        serviceConfig: IServiceConfig
     ) {
-        this.serviceConfig = new ServiceConfig(serviceConfigType);
+        this.serviceConfig = serviceConfig;
         this.requestOptions = new RequestOptions({
             headers: new Headers({ 
                 'Content-Type': MimeType.JSON,
@@ -47,7 +48,8 @@ export class BaseService<T extends IBaseModel> {
 
         this.restUrlBuilder.withConfig({
             rootApiUrl: this.serviceConfig.rootApiUrl,
-            urlSuffix: this.serviceConfig.urlSuffix
+            urlSuffix: this.serviceConfig.urlSuffix,
+            useRestricted: this.serviceConfig.useRestrictedEndpoint,
         });
 
         return this;

@@ -1,3 +1,5 @@
+import { CONST } from "../../app/constants";
+
 export class RestUrlBuilder {
     protected rootApiUrl: string = null;
     protected urlSuffix: string = null;
@@ -6,6 +8,7 @@ export class RestUrlBuilder {
     protected id: string = null;
     protected operation: string = null;
     protected query: Object = null;
+    protected useRestricted: boolean = false;
 
     constructor() {
         return this;
@@ -24,6 +27,10 @@ export class RestUrlBuilder {
     setUrlSuffixPlural(urlSuffixPlural: string) {
         this.urlSuffixPlural = urlSuffixPlural;
         return this;
+    }
+
+    setUseRestricted(useRestricted:boolean){
+        this.useRestricted = useRestricted;
     }
 
     withConfig(configuration?: RestUrlConfigType): RestUrlBuilder {
@@ -55,6 +62,12 @@ export class RestUrlBuilder {
             this.id = null;
         }
 
+        if (configuration.useRestricted !== undefined) {
+            this.useRestricted = configuration.useRestricted;
+        } else {
+            this.useRestricted = null;
+        }
+
         if (configuration.operation !== undefined) {
             this.operation = configuration.operation;
         } else {
@@ -81,6 +94,10 @@ export class RestUrlBuilder {
             urlParts.push(this.urlSuffixPlural);
         } else {
             urlParts.push(this.urlSuffix);
+        }
+
+        if (this.useRestricted) {
+            urlParts.push(CONST.ep.RESTRICTED);
         }
 
         if (this.id !== null) {
@@ -154,4 +171,5 @@ export interface RestUrlConfigType {
     id?: string;
     operation?: string;
     query?: Object;
+    useRestricted?: boolean;
 };
