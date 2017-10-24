@@ -41,7 +41,7 @@ export class AlertService {
 
     throw(error: AppError, showAfterNavigationChange = true){
         this.keepAfterNavigationChange = showAfterNavigationChange;
-        this.messageSource.next({title:'Error', text: error.message, notificationType: NotificationType.danger});
+        this.messageSource.next({title:'Error', text: error.message +  '   ' + error.description, notificationType: NotificationType.danger});
     }
 
     getMessage(): Observable<IMessage> {

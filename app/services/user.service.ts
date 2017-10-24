@@ -29,8 +29,10 @@ export class UserService extends BaseService<IUser> {
     }
 
     private authenticate(user: IUser): Observable<Response> {
-        return this.http.post(
-            this.serviceConfig.rootApiUrl + CONST.ep.AUTHENTICATE,user).catch(this.handleErrors);
+        let url = `${this.serviceConfig.rootApiUrl}${CONST.ep.AUTHENTICATE}`;
+        this.logUrl(url, CONST.verbs.POST);
+
+        return this.http.post(url,user).catch(this.handleErrors);
     }
 
     public login(user:IUser): Observable<IAuthenticationResponse>{
@@ -59,9 +61,11 @@ export class UserService extends BaseService<IUser> {
             password:newPassword,
             _id: applicationSettings.getString(CONST.CURRENT_USER_ID)
         }
-        return this.http.put(
-            `${this.serviceConfig.rootApiUrl}${CONST.ep.USERS}${CONST.ep.RESTRICTED}${CONST.ep.UPDATE_PASSWORD}/${user._id}`, 
-            user, this.requestOptions)
+
+        let url = `${this.serviceConfig.rootApiUrl}${CONST.ep.USERS}${CONST.ep.RESTRICTED}${CONST.ep.UPDATE_PASSWORD}/${user._id}`;
+        this.logUrl(url, CONST.verbs.PUT);
+
+        return this.http.put(url, user, this.requestOptions)
             .catch(this.handleErrors);
     }
 

@@ -32,6 +32,8 @@ export class SettingsComponent implements OnInit {
     public signupSteps = SignupSteps;
     public settingsFormStyle = SettingsFormStyle;
     public currentSignUpStep: SignupSteps;
+
+    //region Forms
     public nameForm: FormGroup;
     public emailForm: FormGroup;
     public phoneForm: FormGroup;
@@ -40,7 +42,7 @@ export class SettingsComponent implements OnInit {
     public pickupDetailsForm: FormGroup;
     public slugForm: FormGroup;
     public termsForm: FormGroup;
-
+    //endregion
 
     public user: IUser = {};
     public supplier: ISupplier = {};
@@ -65,6 +67,7 @@ export class SettingsComponent implements OnInit {
         //Need to create empty objects so there's no null ref.
         this.supplier.companyAddress = {};
         this.supplier.pickupAddress = {};
+        //region Form validation Setup
         this.nameForm = this.fb.group({
             "firstName": ["firstName", [Validators.required]],
             "lastName": ["lastName", [Validators.required]]
@@ -99,29 +102,9 @@ export class SettingsComponent implements OnInit {
         this.termsForm = this.fb.group({
             "agree": ["agree", []],
         });
-
-        // TESTING ONLY
-        //this.prefillForm();
-
-        if (this.isSettingsForm) {
-            // Here because it's a settings form, we're going to load data from the API.
-            let tokenPayload: ITokenPayload = JSON.parse(applicationSettings.getString(CONST.CLIENT_DECODED_TOKEN_LOCATION));
-
-            this.userService.get(tokenPayload.userId).subscribe(user => {
-                this.user = user;
-            });
-
-            this.organizationService.get(tokenPayload.organizationId).subscribe(org => {
-                this.organization = org;
-            });
-
-            this.suppliserService.getSupplierFromOrganization(tokenPayload.organizationId).subscribe(supplier => {
-                this.supplier = supplier;
-            });
-        }
+        //endregion
 
         console.log('in on constructor in settings component');
-
     }
 
     public samePerson(args) {
@@ -146,16 +129,28 @@ export class SettingsComponent implements OnInit {
         // If we're on android we need the back button to handle our "fake pages", so we're going to 
         // listen for the activity, and then "go back" whenever the hardware button is pressed.
         if (application.android) {
-            application.android.on(AndroidApplication.activityBackPressedEvent, (data: AndroidActivityBackPressedEventData) => {
-                data.cancel = true; // prevents default back button behavior, which kinda minimizes/closes the application. 
-                this.goBack();
-                this.cdr.detectChanges(); // tell angular to do change detection.  I think because this code is executed outside of angular's view
-            });
+            if (this.isSettingsForm) {
+                // This certainly doesn't seem to work, but it at least keeps it from crashing.  At some point maybe we can look into how to fix this.
+                application.android.on(AndroidApplication.activityBackPressedEvent, (data: AndroidActivityBackPressedEventData) => {
+                    data.cancel = true; // prevents default back button behavior, which kinda minimizes/closes the application. 
+                    this.cancel();
+                    this.cdr.detectChanges(); // tell angular to do change detection.  I think because this code is executed outside of angular's view
+                });
+            }
+            else {
+                application.android.on(AndroidApplication.activityBackPressedEvent, (data: AndroidActivityBackPressedEventData) => {
+                    data.cancel = true; // prevents default back button behavior, which kinda minimizes/closes the application. 
+                    this.goBack();
+                    this.cdr.detectChanges(); // tell angular to do change detection.  I think because this code is executed outside of angular's view
+                });
+            }
         }
 
         console.log(`Current Settings Form Style ${this.currentFormStyle}`);
         if (!this.isSettingsForm) {
             this.currentSignUpStep = SignupSteps.name;
+            // TESTING ONLY
+            this.prefillForm();
         }
 
         if (this.isSettingsForm) {
@@ -164,15 +159,15 @@ export class SettingsComponent implements OnInit {
 
             this.userService.get(tokenPayload.userId).subscribe(user => {
                 this.user = user;
-            });
+            }, error => { this.errorEventBus.throw(error); });
 
             this.organizationService.get(tokenPayload.organizationId).subscribe(org => {
                 this.organization = org;
-            });
+            }, error => { this.errorEventBus.throw(error); });
 
             this.suppliserService.getSupplierFromOrganization(tokenPayload.organizationId).subscribe(supplier => {
                 this.supplier = supplier;
-            });
+            }, error => { this.errorEventBus.throw(error); });
         }
     }
 
@@ -267,19 +262,24 @@ export class SettingsComponent implements OnInit {
     }
 
     goNext(target: SignupSteps) {
-        if (!this.isStepValid(this.currentSignUpStep)) {
-            this.alertService.send({
-                notificationType: NotificationType.validationError,
-                text: 'Please correct the errors on the form.',
-                title: 'Validation Warning'
-            });
-            return;
-        } else {
-            this.currentSignUpStep = target;
+        if (this.isSettingsForm) {
+            this.save();
+        }
+        else {
+            if (!this.isStepValid(this.currentSignUpStep)) {
+                this.alertService.send({
+                    notificationType: NotificationType.validationError,
+                    text: 'Please correct the errors on the form.',
+                    title: 'Validation Warning'
+                });
+                return;
+            } else {
+                this.currentSignUpStep = target;
 
-            if (this.currentSignUpStep === SignupSteps.submitData && !this.hasSubmitted) {
-                this.registerSupplierAndUser();
-                this.hasSubmitted = true;
+                if (this.currentSignUpStep === SignupSteps.submitData && !this.hasSubmitted) {
+                    this.registerSupplierAndUser();
+                    this.hasSubmitted = true;
+                }
             }
         }
     }
@@ -297,10 +297,9 @@ export class SettingsComponent implements OnInit {
                             this.isBusy = false;
                             // We can close the dialog by calling cancel.... I'm not sure that's exactly what I want to do though.
                             this.cancel();
-                        });
+                        }, error => { this.handleApiError(error); });
                     } catch (err) {
-                        this.isBusy = false;
-                        this.errorEventBus.throw(err);
+                        this.handleApiError(err);
                     }
                 }
                 break;
@@ -315,37 +314,35 @@ export class SettingsComponent implements OnInit {
                             this.organization.name = this.supplier.name;
 
                             return supplier;
-
-                        }).flatMap(supplier =>{
+                        }).flatMap(supplier => {
                             console.log('About to start org.');
+
                             return this.organizationService.changeName(this.organization);
-                        }).map(org =>{
-                                console.log('Org Updated now were turning off the busy');
-                                this.organization = org;
-                                this.isBusy = false;
-                        })
-                        // Because observables are lazy until there is a subscription, we have to have a subscription at the end of this to actually execute it.
-                        .subscribe(()=>{
-                            console.log('Chain Executed');
+                        }).map(org => {
+                            console.log('Org Updated now were turning off the busy');
+                            this.organization = org;
+                            this.isBusy = false;
+                        })// Because observables are lazy until there is a subscription, we have to have a subscription at the end of this to actually execute it.
+                        .subscribe(() => {
+                            console.log('Business Form Settings Saved.');
                             this.cancel();
-                        })
+                        }, error => { this.handleApiError(error); });
                     } catch (err) {
-                        this.isBusy = false;
-                        this.errorEventBus.throw(err);
+                        this.handleApiError(err);
                     }
                 }
                 break;
             case SettingsFormStyle.user:
                 if (this.emailForm.valid && this.nameForm.valid && this.phoneForm.valid) {
                     try {
+                        console.log(this.user._id);
                         this.userService.update(this.user, this.user._id).subscribe(user => {
                             this.user = user;
                             this.isBusy = false;
                             this.cancel();
-                        });
+                        }, error => { this.handleApiError(error); });
                     } catch (err) {
-                        this.isBusy = false;
-                        this.errorEventBus.throw(err);
+                        this.handleApiError(err);
                     }
                 }
                 break;
@@ -354,6 +351,11 @@ export class SettingsComponent implements OnInit {
 
     cancel() {
         this.settingsEventBus.cancel();
+    }
+
+    handleApiError(error) {
+        this.isBusy = false;
+        this.errorEventBus.throw(error);
     }
 
     registerSupplierAndUser() {
@@ -369,7 +371,10 @@ export class SettingsComponent implements OnInit {
                 // });
                 console.log('Sending to home after successfull registration.')
                 this.router.navigate(["/home"]);
-            })
+            }, error => {
+                this.handleApiError(error);
+                this.goBack();
+            });
         }
         catch (err) {
             this.isBusy = false;

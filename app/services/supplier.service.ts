@@ -33,12 +33,13 @@ export class SupplierService extends BaseService<ISupplier> {
             if(suppliers && suppliers.length > 0){
                 return suppliers[0];
             }
-        });
+        }).catch(this.handleError);
     }
 
     public register(supplier: ISupplier, token: string): Observable<Response> {
-        return this.http.post(
-            this.serviceConfig.rootApiUrl + CONST.ep.SUPPLIERS + CONST.ep.REGISTER, supplier, {
+        let url = this.serviceConfig.rootApiUrl + CONST.ep.SUPPLIERS + CONST.ep.REGISTER
+        this.logUrl(url, CONST.verbs.POST);
+        return this.http.post(url, supplier, {
                 headers: new Headers({ 
                     'Content-Type': MimeType.JSON,
                     'x-access-token': token
@@ -48,7 +49,6 @@ export class SupplierService extends BaseService<ISupplier> {
     }
 
     public createNewSupplierTeam(supplier: ISupplier, user: IUser): Observable<IAuthenticationResponse> {
-        try {
             // try this again.
             const userService = new UserService(this.http);
             // First we register the new user.
@@ -93,9 +93,5 @@ export class SupplierService extends BaseService<ISupplier> {
                 console.log(`Created user token: ${finalAuthResponse.token}`);
                 return finalAuthResponse;
             }).catch(this.handleError);
-
-        } catch (err) {
-            super.handleError(err);
-        }
     }
 }

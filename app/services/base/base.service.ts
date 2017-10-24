@@ -6,7 +6,7 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch'
 
 import { ServiceError } from '../../classes/app-error.class'
-import { IBaseModel } from '../../models';
+import { IBaseModel, IValidationError } from '../../models';
 import { environment } from "../../environments/environment";
 import { IServiceConfig } from './service.config';
 import { RestUrlConfigType, RestUrlBuilder } from '../../builders/rest-url.builder';
@@ -68,6 +68,7 @@ export class BaseService<T extends IBaseModel> {
     get<T extends IBaseModel>(id: string): Observable<T> {
         this.refreshAuthToken();
         const url = this.buildUrl({ id: id , useRestricted: this.serviceConfig.useRestrictedEndpoint });
+        this.logUrl(url, CONST.verbs.GET);
         return this.http
             .get(url, this.requestOptions)
             .map((res: Response) => {
@@ -79,6 +80,7 @@ export class BaseService<T extends IBaseModel> {
     getList<T extends IBaseModel>(query?: Object): Observable<T[]> {
         this.refreshAuthToken();
         const url = this.buildUrl({ query , useRestricted: this.serviceConfig.useRestrictedEndpoint });
+        this.logUrl(url, CONST.verbs.GET);
         return this.http
             .get(url, this.requestOptions)
             .map((res: Response) => {
@@ -90,6 +92,7 @@ export class BaseService<T extends IBaseModel> {
     search<T extends IBaseModel>(query?: Object): Observable<T[]> {
         this.refreshAuthToken();
         const url = this.buildUrl();
+        this.logUrl(url, CONST.verbs.POST);        
         return this.http
             .post(this.serviceConfig.rootApiUrl + this.serviceConfig.urlSuffix + CONST.ep.QUERY, query,this.requestOptions)
             .map((res: Response) => {
@@ -102,6 +105,7 @@ export class BaseService<T extends IBaseModel> {
     delete<T extends IBaseModel>(id: string, query?: Object): Observable<void> {
         this.refreshAuthToken();
         const url = this.buildUrl({ id, query , useRestricted: this.serviceConfig.useRestrictedEndpoint });
+        this.logUrl(url, CONST.verbs.DELETE);
         return this.http
             .delete(url, this.requestOptions)
             .map((res: Response) => {
@@ -113,6 +117,7 @@ export class BaseService<T extends IBaseModel> {
     create<T extends IBaseModel>(T: T, query?: Object): Observable<T> {
         this.refreshAuthToken();
         const url = this.buildUrl({ query , useRestricted: this.serviceConfig.useRestrictedEndpoint });
+        this.logUrl(url, CONST.verbs.POST);
         return this.http
             .post(url, T, this.requestOptions)
             .map((res: Response) => {
@@ -124,7 +129,7 @@ export class BaseService<T extends IBaseModel> {
     update<T extends IBaseModel>(T: T, id: string, query?: Object): Observable<T> {
         this.refreshAuthToken();
         const url = this.buildUrl({ id: id, query: query , useRestricted: this.serviceConfig.useRestrictedEndpoint });
-        console.log(url);
+        this.logUrl(url, CONST.verbs.PATCH);
         return this.http
             .patch(url, T, this.requestOptions)
             .map((res: Response) => {
@@ -139,6 +144,7 @@ export class BaseService<T extends IBaseModel> {
     executeSingleOperation<T extends IBaseModel>(id: string, operation?: string, query?: Object): Observable<T> {
         this.refreshAuthToken();
         const url: string = this.buildUrl({ id, operation, query , useRestricted: this.serviceConfig.useRestrictedEndpoint });
+        this.logUrl(url, CONST.verbs.GET);
         return this.http
             .get(url, this.requestOptions)
             .map((res: Response) => {
@@ -152,6 +158,7 @@ export class BaseService<T extends IBaseModel> {
     executeListOperation<T extends IBaseModel>(id: string, operation: string, query?: Object): Observable<T[]> {
         this.refreshAuthToken();
         const url = this.buildUrl({ id, operation, query , useRestricted: this.serviceConfig.useRestrictedEndpoint });
+        this.logUrl(url, CONST.verbs.GET);
         return this.http.get(url, this.requestOptions).map((res: Response) => {
             return res.json();
         }).catch(this.handleError);
@@ -159,6 +166,10 @@ export class BaseService<T extends IBaseModel> {
 
     protected buildUrl(configuration?: RestUrlConfigType): string {
         return this.restUrlBuilder.withConfig(configuration).build();
+    }
+
+    protected logUrl(url: string, verb: string ){
+        console.log(`Executing a ${verb} request against: ${url}`);
     }
 
 
@@ -177,11 +188,32 @@ export class BaseService<T extends IBaseModel> {
         const appError = new ServiceError();
         if (errorResponse instanceof Response) {
             const body = errorResponse.json() || '';
-            appError.message = body.message ? body.message : 'no message provided';
-            appError.description = body.description ? body.description : 'no description provided';
-            appError.stack = body.stack ? body.stack : 'no stack provided';
-            appError.statusCode = errorResponse.status;
-            appError.statusText = errorResponse.statusText;
+            console.log(JSON.stringify(body));
+            if(body.validationError){
+                // Here we know the api sent back a validation error, so we'll set it up correctly;
+                appError.message = body.validationError ? body.validationError : 'no message provided';
+                // we're going to spin through all the validation errors, and concat them.
+                appError.description = '';
+                if(body.validationErrors && body.validationErrors.length > 0){
+                    let validationErrors: IValidationError[] = body.validationErrors as IValidationError[];
+                    for (var i = 0; i < validationErrors.length; i++) {
+                        var validationError = validationErrors[i];
+                        appError.description = appError.description + ' Validation Error: ' + validationError.message;
+                    }
+                }
+                else{
+                    appError.description = body.description ? body.description : 'no description provided';
+                }
+                appError.stack = 'no stack provided';
+                appError.statusCode = errorResponse.status;
+                appError.statusText = errorResponse.statusText;
+            }else{
+                appError.message = body.message ? body.message : 'no message provided';
+                appError.description = body.description ? body.description : 'no description provided';
+                appError.stack = body.stack ? body.stack : 'no stack provided';
+                appError.statusCode = errorResponse.status;
+                appError.statusText = errorResponse.statusText;
+            }
             return Observable.throw(appError);
         } else {
             appError.message = typeof errorResponse.message !== 'undefined' ? errorResponse.message : errorResponse.toString();

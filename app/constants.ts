@@ -26,6 +26,13 @@ export const CONST = {
             RESET_PASSWORD: '/reset-password'
         }
     },
+    verbs: {
+        PUT: 'PUT',
+        PATCH: 'PATCH',
+        POST: 'POST',
+        DELETE: 'DELETE',
+        GET: 'GET',
+    },
     CLIENT_TOKEN_LOCATION: 'token',
     CLIENT_DECODED_TOKEN_LOCATION: 'decoded-token',
     CURRENT_USER_ID: 'current_user_id',
