@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "93157816664",
+    "firebase_url": "https://leblum-io.firebaseio.com",
+    "project_id": "leblum-io",
+    "storage_bucket": "leblum-io.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:93157816664:android:4a45d6224f716195",
+        "android_client_info": {
+          "package_name": "io.leblum.supplierapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "93157816664-fufe4oi72en0h1fgt5i2kmsg08trjdk4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsaeHCWMSRaYUNiB2CHkn8JcLC0u2EljA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -12,7 +12,6 @@ import { NotificationType } from "../../../app/enumerations";
 import { ErrorEventBus } from "../../../app/event-buses/error.event-bus";
 import * as application from "application";
 
-
 @Component({
     selector: "login-page",
     providers: [UserService],

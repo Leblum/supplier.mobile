@@ -8,7 +8,7 @@
 android {  
   defaultConfig {  
     generatedDensities = []
-    applicationId = "org.nativescript.supplierapp"  
+    applicationId = "io.leblum.supplierapp"  
   }  
   aaptOptions {  
     additionalParameters "--no-version-vectors"  
@@ -20,4 +20,8 @@ def settingsGradleFile = new File(settingsGradlePath);
 if(settingsGradleFile.exists())
 {
     apply from: settingsGradleFile;
+}
+
+dependencies {
+  compile "com.google.firebase:firebase-messaging:11.2.2"
 }
