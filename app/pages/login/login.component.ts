@@ -11,6 +11,7 @@ import { AlertService } from "../../../app/services";
 import { NotificationType } from "../../../app/enumerations";
 import { ErrorEventBus } from "../../../app/event-buses/error.event-bus";
 import * as application from "application";
+import { FirebaseMessaging } from "../../../app/classes/firebase.messaging";
 
 @Component({
     selector: "login-page",
@@ -25,7 +26,8 @@ export class LoginComponent implements OnInit {
     public isBusy: boolean = false;
     public isRememberMeActive: boolean = false;
 
-    constructor(private router: Router, private userService: UserService, private page: Page, private alertService: AlertService, private errorEventBus: ErrorEventBus) {
+    constructor(private router: Router, private userService: UserService, private page: Page, private alertService: AlertService, private errorEventBus: ErrorEventBus
+        , private firebaseMessaging: FirebaseMessaging) {
         // For testing
         this.user = {
             email: 'bd3@leblum.com',
@@ -54,6 +56,7 @@ export class LoginComponent implements OnInit {
             .subscribe(authResponse => {
                 this.router.navigate(["/home"]);
                 this.isBusy = false;
+                this.firebaseMessaging.updateCurrentFirebaseToken();
             },
             (error) => {
                 this.errorEventBus.throw(error);

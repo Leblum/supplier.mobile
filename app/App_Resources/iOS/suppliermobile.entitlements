@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+		<key>keychain-access-groups</key>
+		<array>
+			<string>Y9QQF5DVP4.*</string>		
+		</array>
+		<key>get-task-allow</key>
+		<true/>
+		<key>application-identifier</key>
+		<string>Y9QQF5DVP4.io.leblum.supplierapp</string>
+		<key>com.apple.developer.team-identifier</key>
+		<string>Y9QQF5DVP4</string>
+		<key>aps-environment</key>
+		<string>development</string>
+</dict>
+</plist>

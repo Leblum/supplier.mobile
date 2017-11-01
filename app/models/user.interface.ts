@@ -14,4 +14,5 @@ export interface IUser {
     isEmailVerified?: boolean;
     createdAt?: Date; //Automatically created by mongoose.
     modifiedAt?: Date; //Automatically created by mongoose.
+    pushTokens?: Array<string>;
 }

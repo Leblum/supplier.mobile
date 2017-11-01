@@ -4,3 +4,34 @@
 TabView {
     selected-tab-text-color: $item-active-color;
 }
+
+.field-label{
+    margin-bottom: 10;
+    opacity: .5;
+}
+TextField{
+    margin-bottom: 5;
+}
+
+.validation-message{
+    color: $validation-message;
+    opacity: .5;
+    font-size:15;
+    margin-top: 2;
+    margin-bottom: 5;
+}
+
+Switch{
+    margin-bottom: 10;
+  }
+
+  .contact-title{
+    font-size:20;
+    font-weight: bold;
+    opacity: .9;
+    margin-bottom: 10;
+}
+
+.contact-switch-label{
+    margin-bottom: 10;
+}

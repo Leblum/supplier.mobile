@@ -17,6 +17,7 @@ import { SharedModule } from "../app/shared/shared.module";
 import { SignupModule } from "../app/pages/signup/signup.module";
 import { TabsModule } from "../app/tabs/tabs.module";
 import { SettingsEventBus } from "../app/event-buses/settings.event-bus";
+import { FirebaseMessaging } from "../app/classes/firebase.messaging";
 
 @NgModule({
     bootstrap: [
@@ -43,7 +44,8 @@ import { SettingsEventBus } from "../app/event-buses/settings.event-bus";
         ErrorEventBus,
         AuthGuard,
         SettingsEventBus,
-        OrganizationService
+        OrganizationService,
+        FirebaseMessaging
     ],
     schemas: [
         NO_ERRORS_SCHEMA

@@ -15,4 +15,5 @@ export interface ISupplier {
     isApproved?: boolean,
     isActive?: boolean,
     href?:string,
+    pushTokens?: Array<string>,
 }

@@ -22,6 +22,6 @@ if(settingsGradleFile.exists())
     apply from: settingsGradleFile;
 }
 
-dependencies {
-  compile "com.google.firebase:firebase-messaging:11.2.2"
-}
+// dependencies {
+//   compile "com.google.firebase:firebase-messaging:11.2.2"
+// }

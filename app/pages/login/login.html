@@ -12,7 +12,7 @@
         <Button row="3" colSpan="2" text="Sign In" class="submit-button" (tap)="login()"></Button>
         <GridLayout row="4" colSpan="2"  rows="auto" columns="20,*, *">
             <Switch row="0" col="1" checked="{{ isRememberMeActive }}" ></Switch>
-            <Label row="0" col="2" text="Remember Me"></Label>
+            <Label row="0" col="2" class="remember-me" text="Remember Me"></Label>
         </GridLayout>
         <Button row="5" col="0" class="secondary-button" textWrap="true" text="Forgot Password?" (tap)="initiateForgotPassword()"></Button>
         <Button row="5" col="1" class="secondary-button" textWrap="true" text="Sign Up" (tap)="navigateToSignup()"></Button>

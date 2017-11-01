@@ -26,8 +26,8 @@
 // Common page class
 .page-content {
 
-    margin-left: 30;
-    margin-right: 30;
+    margin-left: 20;
+    margin-right: 20;
     background-color: $text-light;
     padding-top:20;
     padding-bottom:20;
@@ -52,9 +52,11 @@ Switch{
     background-color: $switch-color;
 }
 
-Button, TextField {
-    margin-left: 16;
-    margin-right: 16;
+TextField {
+    margin-bottom: 20;
+}
+
+Button {
     margin-bottom: 20;
 }
 
@@ -107,8 +109,8 @@ ActivityIndicator{
   }
 
   .wrapper{
-    margin-left: 30;
-    margin-right: 30;
+    margin-left: 10;
+    margin-right: 10;
     margin-top:20;
     margin-bottom:20;
     background-color: $text-light;

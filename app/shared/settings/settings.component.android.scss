@@ -7,3 +7,15 @@ TabView {
     android-selected-tab-text-color: $grey-dark;
     android-selected-tab-highlight-color: $item-active-color;
 }
+
+Label{
+    margin-left: 20;
+    margin-bottom: 10;
+  }
+  
+
+  .field-label{
+    font-size: 20;
+    opacity: .7;
+    margin-bottom: -2;
+}

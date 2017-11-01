@@ -33,6 +33,7 @@ export const CONST = {
         DELETE: 'DELETE',
         GET: 'GET',
     },
+    CLIENT_FIREBASE_PUSH_TOKEN: 'firebase-push-token',
     CLIENT_TOKEN_LOCATION: 'token',
     CLIENT_DECODED_TOKEN_LOCATION: 'decoded-token',
     CURRENT_USER_ID: 'current_user_id',
